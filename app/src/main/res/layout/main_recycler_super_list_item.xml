@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+<TextView
+    android:id="@+id/Main_Super_RecyclerView_List_Item_GroupName"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Group Name"
+    android:drawableEnd="@drawable/ic_baseline_keyboard_arrow_down_24"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/Main_Super_RecyclerView_List_Item_List"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/main_super_list_item"/>
+    <TextView
+        android:id="@+id/Main_Super_RecyclerView_List_Item_TapToAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tap to add a Note to this group"/>
+</LinearLayout>
