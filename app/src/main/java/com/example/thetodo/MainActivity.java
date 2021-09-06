@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     static public ArrayList<Tasks> myTasks = new ArrayList<>();
     static public ArrayList<Groups> myGroups = new ArrayList<>();
     static public ArrayList<Notes> allNotes = new ArrayList<>();
+
+    SharedPreferences sharedPreferences;
 
     private RecyclerView task_RecyclerView;
     public Task_RecyclerView_Adapter.RecyclerViewClickListener task_listener;
