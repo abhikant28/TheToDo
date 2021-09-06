@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="#0277BD">
+    android:background="#0277BD"
+    android:paddingHorizontal="5dp">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -25,7 +26,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-        <LinearLayout
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -35,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:clickable="false"
+                android:onClick="addTask"
                 android:background="@drawable/ic_baseline_add_24"/>
             <EditText
                 android:id="@+id/Main_Task_TapToAdd"
@@ -46,15 +51,16 @@
                 android:id="@+id/Main_Task_TextView_Remind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp"
+                android:paddingHorizontal="5dp"
                 android:text="Remind"/>
             <TextView
                 android:id="@+id/Main_Task_TextView_Repeat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp"
+                android:paddingHorizontal="5dp"
                 android:text="Repeat"/>
         </LinearLayout>
+        </androidx.cardview.widget.CardView>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/Main_Super_Task_RecyclerView"
                 android:layout_width="match_parent"
@@ -90,11 +96,11 @@
             android:id="@+id/Main_Super_RecyclerView_AllNotes_List"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/main_super_list_item"/>
+            tools:listitem="@layout/main_super_list_item_note"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/Main_Notes_Super_RecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/main_recycler_super_list_item" />
+            tools:listitem="@layout/main_recycler_super_list_item_group" />
     </LinearLayout></ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

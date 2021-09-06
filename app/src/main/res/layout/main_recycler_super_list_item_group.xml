@@ -14,7 +14,7 @@
         android:id="@+id/Main_Super_RecyclerView_List_Item_List"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/main_super_list_item"/>
+        tools:listitem="@layout/main_super_list_item_note"/>
     <TextView
         android:id="@+id/Main_Super_RecyclerView_List_Item_TapToAdd"
         android:layout_width="match_parent"
