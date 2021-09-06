@@ -35,6 +35,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_notes_newGroup;
     private ImageButton ib_add_task;
 
+    public static ArrayList<Notes> getGroupNotes(String g_id) {
+        ArrayList<Notes> notes= new ArrayList<>();
+
+
+
+        return notes;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
