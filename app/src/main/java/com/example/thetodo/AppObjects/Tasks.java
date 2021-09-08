@@ -1,4 +1,4 @@
-package com.example.thetodo;
+package com.example.thetodo.AppObjects;
 
 public class Tasks {
     private String title;

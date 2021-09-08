@@ -8,6 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.thetodo.AppObjects.Notes;
+
 import java.util.ArrayList;
 
 public class Notes_RecyclerView_Adapter extends RecyclerView.Adapter<Notes_RecyclerView_Adapter.MyViewHolder> {

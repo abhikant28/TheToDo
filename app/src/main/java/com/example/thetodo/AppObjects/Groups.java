@@ -1,9 +1,15 @@
-package com.example.thetodo;
+package com.example.thetodo.AppObjects;
 
-import java.util.ArrayList;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "notesGroups_table")
 public class Groups {
-    private String g_id,title,date;
+
+    @PrimaryKey(autoGenerate = true)
+    private String g_id;
+    private String title,date;
     private boolean hidden=false;
 
     public Groups(String title, String date) {

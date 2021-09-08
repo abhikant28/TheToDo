@@ -14,6 +14,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.thetodo.AppObjects.Groups;
+import com.example.thetodo.AppObjects.Notes;
+import com.example.thetodo.AppObjects.Tasks;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,13 +25,16 @@ public class MainActivity extends AppCompatActivity {
     static public ArrayList<Tasks> myTasks = new ArrayList<>();
     static public ArrayList<Groups> myGroups = new ArrayList<>();
     static public ArrayList<Notes> allNotes = new ArrayList<>();
+    static boolean DATABASE=false;
 
     SharedPreferences sharedPreferences;
+    //public SQLiteDatabase sqlDB = this.openOrCreateDatabase(String.valueOf(R.string.app_name), MODE_PRIVATE, null);
 
     private RecyclerView task_RecyclerView;
+    Task_RecyclerView_Adapter task_adapter;
     public Task_RecyclerView_Adapter.RecyclerViewClickListener task_listener;
     private RecyclerView notes_group_RecyclerView;
-    public Task_RecyclerView_Adapter.RecyclerViewClickListener groups_listener;
+    public Notes_Groups_RecyclerView_Adapter.RecyclerViewClickListener groups_listener;
     private RecyclerView notes_all_RecyclerView;
     public Notes_RecyclerView_Adapter.RecyclerViewClickListener allNotes_listener;
 
@@ -62,15 +69,26 @@ public class MainActivity extends AppCompatActivity {
         tv_notes_newGroup=findViewById(R.id.Main_Notes_TextView_NewNoteGroup);
         tv_notes_newNote=findViewById(R.id.Main_Notes_TextView_NewNote);
 
-        demoGroupsData();
-        demoNotesData();
-        demoTaskData();
+        if(DATABASE){
+            fetchAllData();
+        }else{
+
+        }
+
+//        demoGroupsData();
+//        demoNotesData();
+//        demoTaskData();
 
         setTaskAdapter();
         setAllNotesAdapter();
+        setNotesGroupsAdapter();
 
         ev_task_tapToAdd.addTextChangedListener(checkText);
 
+    }
+
+    private void fetchAllData() {
+       // sqlDB.query();
     }
 
     private TextWatcher checkText = new TextWatcher() {
@@ -81,7 +99,15 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                ib_add_task.setClickable((charSequence.length()>0));
+            if(charSequence.length()>0){
+                ib_add_task.setClickable(true);
+           //     ib_add_task.setBackgroundColor(Color.parseColor("#FF6DC530"));
+            }else{
+                ib_add_task.setClickable(false);
+             //   ib_add_task.setBackgroundColor(Color.parseColor("#817E7E"));
+
+            }
+
         }
 
         @Override
@@ -90,12 +116,20 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private void setNotesGroupsAdapter() {
+        Notes_Groups_RecyclerView_Adapter adapter = new Notes_Groups_RecyclerView_Adapter(myGroups, groups_listener);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        notes_group_RecyclerView.setLayoutManager(layoutManager);
+        notes_group_RecyclerView.setItemAnimator(new DefaultItemAnimator());
+        notes_group_RecyclerView.setAdapter(adapter);
+    }
+
     private void setTaskAdapter() {
-        Task_RecyclerView_Adapter adapter = new Task_RecyclerView_Adapter(myTasks, task_listener);
+        task_adapter = new Task_RecyclerView_Adapter(myTasks, task_listener);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         task_RecyclerView.setLayoutManager(layoutManager);
         task_RecyclerView.setItemAnimator(new DefaultItemAnimator());
-        task_RecyclerView.setAdapter(adapter);
+        task_RecyclerView.setAdapter(task_adapter);
     }
 
     private void setAllNotesAdapter() {
@@ -125,14 +159,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void demoGroupsData(){
-        myGroups.add(new Groups("awsdw","First Group"));
-        myGroups.add(new Groups("awsdw","Second Group"));
-        myGroups.add(new Groups("awsdw","Third Group"));
-        myGroups.add(new Groups("awsdw","Fourth Group"));
+        myGroups.add(new Groups("First Group","1 Aug,2021"));
+        myGroups.add(new Groups("Second Group","2 Aug,2022"));
+        myGroups.add(new Groups("Third Group","4 Aug,2023"));
+        myGroups.add(new Groups("Fourth Group","5 Aug,2024"));
+        myGroups.add(new Groups("Fifth Group","6 Aug,2025"));
+
     }
 
     public void addTask(View view) {
-        myTasks.add(0,new Tasks(ev_task_tapToAdd.getText().toString(),false,"Daily"));
-        ev_task_tapToAdd.setText("");
+        if(!ev_task_tapToAdd.getText().toString().isEmpty()){
+            myTasks.add(0, new Tasks(ev_task_tapToAdd.getText().toString(), false, "Daily"));
+            ev_task_tapToAdd.setText("");
+            task_adapter.notifyItemInserted(0);
+        }
     }
 }

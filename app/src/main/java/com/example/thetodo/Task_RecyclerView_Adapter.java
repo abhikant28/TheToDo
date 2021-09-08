@@ -4,15 +4,16 @@ import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.thetodo.AppObjects.Tasks;
+
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class Task_RecyclerView_Adapter extends RecyclerView.Adapter<Task_RecyclerView_Adapter.MyViewHolder> {
     private RecyclerViewClickListener listener;
@@ -22,14 +23,14 @@ public class Task_RecyclerView_Adapter extends RecyclerView.Adapter<Task_Recycle
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private RadioButton rb_Tasks_completed;
+        private CheckBox rb_Tasks_completed;
         private TextView tv_type;
         private TextView tv_title;
 
         public MyViewHolder(@NonNull View view) {
             super(view);
             tv_type = view.findViewById(R.id.Main_Task_List_Item_Type);
-            rb_Tasks_completed= view.findViewById(R.id.Main_Task_List_Item_radioButton);
+            rb_Tasks_completed= view.findViewById(R.id.Main_Task_List_Item_checkButton);
             tv_title=view.findViewById(R.id.Main_Task_List_Item_Title);
 
             tv_title.setOnClickListener(new View.OnClickListener() {
@@ -37,7 +38,6 @@ public class Task_RecyclerView_Adapter extends RecyclerView.Adapter<Task_Recycle
                 public void onClick(View view) {
                     tv_type.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
                     tv_type.requestLayout();
-
                 }
             });
             rb_Tasks_completed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -46,8 +46,14 @@ public class Task_RecyclerView_Adapter extends RecyclerView.Adapter<Task_Recycle
                     if(b){
                         MainActivity.myTasks.get(getAdapterPosition()).setCompleted(true);
                         tv_title.setPaintFlags(compoundButton.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                            MainActivity.myTasks.add(MainActivity.myTasks.get(getAdapterPosition()));
-                            MainActivity.myTasks.remove(getAdapterPosition());
+                        MainActivity.myTasks.add(MainActivity.myTasks.get(getAdapterPosition()));
+                        MainActivity.myTasks.remove(getAdapterPosition());
+                        notifyItemRemoved(getAdapterPosition());
+                    }else{
+                        MainActivity.myTasks.get(getAdapterPosition()).setCompleted(false);
+                        tv_title.setPaintFlags(0);
+                        MainActivity.myTasks.add(newPosition(getAdapterPosition()),MainActivity.myTasks.get(getAdapterPosition()));
+                        MainActivity.myTasks.remove(getAdapterPosition());
                     }
                 }
             });
@@ -76,7 +82,7 @@ public class Task_RecyclerView_Adapter extends RecyclerView.Adapter<Task_Recycle
     holder.tv_type.setText(type);
     holder.rb_Tasks_completed.setChecked(completed);
         if(completed) {
-            holder.rb_Tasks_completed.setPaintFlags(holder.rb_Tasks_completed.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.tv_title.setPaintFlags(holder.rb_Tasks_completed.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
     }
 
@@ -87,5 +93,15 @@ public class Task_RecyclerView_Adapter extends RecyclerView.Adapter<Task_Recycle
 
     public interface RecyclerViewClickListener{
         void onClick(View v, int position);
+    }
+
+    private int newPosition(int currentPosition){
+        int newPosition=currentPosition;
+
+        for (;newPosition>=0;newPosition--){
+            if(!MainActivity.myTasks.get(newPosition).isCompleted())
+            {break;}
+        }
+        return newPosition;
     }
 }
