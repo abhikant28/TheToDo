@@ -9,24 +9,26 @@ import java.util.Date;
 public class Notes {
 
     @PrimaryKey(autoGenerate = true)
-    private String n_id;
+    private int n_id;
 
-    private String title,body,date,g_id;
+    private String title,body,date;
+    private int g_id;
     private boolean show;
 
-    public Notes(String title, String body) {
+    public Notes(String title, String body, Integer g_id) {
         this.title = title;
         this.body = body;
+        this.g_id = g_id;
         Date getDate=java.util.Calendar.getInstance().getTime();
-        this.date=String.valueOf(getDate).substring(0, 10)+","+String.valueOf(getDate).substring(20);
-
+        this.date=String.valueOf(getDate).substring(0, 10);
+        this.show=true;
     }
 
-    public String getN_id() {
+    public int getN_id() {
         return n_id;
     }
 
-    public void setN_id(String n_id) {
+    public void setN_id(int n_id) {
         this.n_id = n_id;
     }
 
@@ -54,11 +56,11 @@ public class Notes {
         this.date = date;
     }
 
-    public String getG_id() {
+    public int getG_id() {
         return g_id;
     }
 
-    public void setG_id(String g_id) {
+    public void setG_id(int g_id) {
         this.g_id = g_id;
     }
 

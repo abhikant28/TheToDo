@@ -14,11 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.thetodo.AppObjects.Tasks;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Task_RecyclerView_Adapter extends RecyclerView.Adapter<Task_RecyclerView_Adapter.MyViewHolder> {
     private RecyclerViewClickListener listener;
 
-    public Task_RecyclerView_Adapter(ArrayList<Tasks> tasks, RecyclerViewClickListener listener){
+    public Task_RecyclerView_Adapter(List<Tasks> tasks, RecyclerViewClickListener listener){
         this.listener= listener;
     }
 

@@ -1,6 +1,7 @@
 package com.example.thetodo.AppObjects;
 
 public class Tasks {
+    private int t_id;
     private String title;
     private boolean completed;
     private String type;

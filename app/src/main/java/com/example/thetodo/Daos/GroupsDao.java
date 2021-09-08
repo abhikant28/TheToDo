@@ -1,5 +1,6 @@
 package com.example.thetodo.Daos;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -7,6 +8,10 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.thetodo.AppObjects.Groups;
+import com.example.thetodo.AppObjects.Notes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Dao
 public interface GroupsDao {
@@ -20,6 +25,7 @@ public interface GroupsDao {
     @Delete
     void delete(Groups group);
 
-    @Query("DELETE FROM notes_table")
-    void deleteAll();
+    @Query("SELECT * FROM notesGroups_table")
+    LiveData<List<Groups>> getAllGroups();
+
 }

@@ -8,16 +8,16 @@ import androidx.room.PrimaryKey;
 public class Groups {
 
     @PrimaryKey(autoGenerate = true)
-    private String g_id;
+    private int g_id;
     private String title,date;
-    private boolean hidden=false;
+    private boolean show =false;
 
     public Groups(String title, String date) {
         this.title = title;
         this.date = date;
     }
 
-    public String getG_id() {
+    public int getG_id() {
         return g_id;
     }
 
@@ -29,11 +29,11 @@ public class Groups {
         return date;
     }
 
-    public boolean isHidden() {
-        return hidden;
+    public boolean isShow() {
+        return show;
     }
 
-    public void setG_id(String g_id) {
+    public void setG_id(int g_id) {
         this.g_id = g_id;
     }
 
@@ -45,8 +45,8 @@ public class Groups {
         this.date = date;
     }
 
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
+    public void setShow(boolean show) {
+        this.show = show;
     }
 }
 

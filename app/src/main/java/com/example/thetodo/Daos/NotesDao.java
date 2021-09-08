@@ -7,10 +7,9 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.thetodo.AppObjects.Groups;
 import com.example.thetodo.AppObjects.Notes;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Dao
 public interface NotesDao {
@@ -24,5 +23,5 @@ public interface NotesDao {
     void delete(Notes note);
 
     @Query("SELECT * FROM notes_table WHERE show is 1 ORDER BY date")
-    LiveData<ArrayList<Notes>> getAllNotes();
+    LiveData<List<Notes>> getAllNotes();
 }

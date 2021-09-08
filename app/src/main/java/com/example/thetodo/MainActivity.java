@@ -1,6 +1,8 @@
 package com.example.thetodo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,16 +21,17 @@ import com.example.thetodo.AppObjects.Notes;
 import com.example.thetodo.AppObjects.Tasks;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    static public ArrayList<Tasks> myTasks = new ArrayList<>();
-    static public ArrayList<Groups> myGroups = new ArrayList<>();
-    static public ArrayList<Notes> allNotes = new ArrayList<>();
+    private TheViewModel viewModel;
+    static public List<Tasks> myTasks = new ArrayList<>();
+    static public List<Groups> myGroups = new ArrayList<>();
+    static public List<Notes> allNotes = new ArrayList<>();
     static boolean DATABASE=false;
 
     SharedPreferences sharedPreferences;
-    //public SQLiteDatabase sqlDB = this.openOrCreateDatabase(String.valueOf(R.string.app_name), MODE_PRIVATE, null);
 
     private RecyclerView task_RecyclerView;
     Task_RecyclerView_Adapter task_adapter;
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView notes_group_RecyclerView;
     public Notes_Groups_RecyclerView_Adapter.RecyclerViewClickListener groups_listener;
     private RecyclerView notes_all_RecyclerView;
+    Notes_RecyclerView_Adapter allNotes_adapter;
     public Notes_RecyclerView_Adapter.RecyclerViewClickListener allNotes_listener;
 
     private EditText ev_task_tapToAdd;
@@ -45,11 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_notes_newGroup;
     private ImageButton ib_add_task;
 
-    public static ArrayList<Notes> getGroupNotes(String g_id) {
-        ArrayList<Notes> notes= new ArrayList<>();
-
-
-
+    public static List<Notes> getGroupNotes(String g_id) {
+        List<Notes> notes= new ArrayList<>();
         return notes;
     }
 
@@ -57,6 +58,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        viewModel= ViewModelProviders.of(this).get(TheViewModel.class);
+        viewModel.getAllNotes().observe(this, new Observer<List<Notes>>() {
+
+            @Override
+            public void onChanged(List<Notes> notes) {
+                    allNotes_adapter.setNotes(notes);
+            }
+        });
 
         task_RecyclerView=findViewById(R.id.Main_Super_Task_RecyclerView);
         notes_group_RecyclerView=findViewById(R.id.Main_Notes_Super_RecyclerView);
@@ -69,26 +79,12 @@ public class MainActivity extends AppCompatActivity {
         tv_notes_newGroup=findViewById(R.id.Main_Notes_TextView_NewNoteGroup);
         tv_notes_newNote=findViewById(R.id.Main_Notes_TextView_NewNote);
 
-        if(DATABASE){
-            fetchAllData();
-        }else{
-
-        }
-
-//        demoGroupsData();
-//        demoNotesData();
-//        demoTaskData();
-
         setTaskAdapter();
         setAllNotesAdapter();
-        setNotesGroupsAdapter();
+ //       setNotesGroupsAdapter();
 
         ev_task_tapToAdd.addTextChangedListener(checkText);
 
-    }
-
-    private void fetchAllData() {
-       // sqlDB.query();
     }
 
     private TextWatcher checkText = new TextWatcher() {
@@ -107,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
              //   ib_add_task.setBackgroundColor(Color.parseColor("#817E7E"));
 
             }
-
         }
 
         @Override
@@ -133,11 +128,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setAllNotesAdapter() {
-        Notes_RecyclerView_Adapter adapter = new Notes_RecyclerView_Adapter(allNotes, allNotes_listener);
+        allNotes_adapter = new Notes_RecyclerView_Adapter(allNotes_listener);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         notes_all_RecyclerView.setLayoutManager(layoutManager);
         notes_all_RecyclerView.setItemAnimator(new DefaultItemAnimator());
-        notes_all_RecyclerView.setAdapter(adapter);
+        notes_all_RecyclerView.setAdapter(allNotes_adapter);
     }
 
 
@@ -150,12 +145,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void demoNotesData(){
-        allNotes.add(new Notes("First Note","Content of the note"));
-        allNotes.add(new Notes("Second Note","Content of the note"));
-        allNotes.add(new Notes("Third Note","Content of the note"));
-        allNotes.add(new Notes("Fourth Note","Content of the note"));
-        allNotes.add(new Notes("Fifth Note","Content of the note"));
-        allNotes.add(new Notes("Sixth Note","Content of the note"));
+        allNotes.add(new Notes("First Note","Content of the note",null));
+        allNotes.add(new Notes("Second Note","Content of the note",null));
+        allNotes.add(new Notes("Third Note","Content of the note",null));
+        allNotes.add(new Notes("Fourth Note","Content of the note",null));
+        allNotes.add(new Notes("Fifth Note","Content of the note",null));
+        allNotes.add(new Notes("Sixth Note","Content of the note",null));
     }
 
     private void demoGroupsData(){

@@ -11,11 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.thetodo.AppObjects.Notes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Notes_RecyclerView_Adapter extends RecyclerView.Adapter<Notes_RecyclerView_Adapter.MyViewHolder> {
     private Notes_RecyclerView_Adapter.RecyclerViewClickListener listener;
+    private List<Notes> notes=new ArrayList<>();
 
-    public Notes_RecyclerView_Adapter(ArrayList<Notes> allNotes, RecyclerViewClickListener allNotes_listener) {
+    public Notes_RecyclerView_Adapter(RecyclerViewClickListener allNotes_listener) {
         this.listener=allNotes_listener;
     }
 
@@ -28,9 +30,9 @@ public class Notes_RecyclerView_Adapter extends RecyclerView.Adapter<Notes_Recyc
 
     @Override
     public void onBindViewHolder(@NonNull Notes_RecyclerView_Adapter.MyViewHolder holder, int position) {
-        String title= MainActivity.allNotes.get(position).getTitle();
-        String about=MainActivity.allNotes.get(position).getBody();
-        String date=MainActivity.allNotes.get(position).getDate();
+        String title= notes.get(position).getTitle();
+        String about=notes.get(position).getBody();
+        String date=notes.get(position).getDate();
 
         if(title.length()!=0){
             holder.tv_title.setText(title);
@@ -41,7 +43,7 @@ public class Notes_RecyclerView_Adapter extends RecyclerView.Adapter<Notes_Recyc
 
     @Override
     public int getItemCount() {
-        return MainActivity.allNotes.size();
+        return notes.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -64,5 +66,9 @@ public class Notes_RecyclerView_Adapter extends RecyclerView.Adapter<Notes_Recyc
 
     public interface RecyclerViewClickListener {
         void onClick(View v, int position);
+    }
+
+    public void setNotes(List<Notes> notes){
+        this.notes=notes;
     }
 }
