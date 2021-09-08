@@ -1,10 +1,13 @@
 package com.example.thetodo;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.thetodo.AppObjects.Groups;
 import com.example.thetodo.AppObjects.Notes;
@@ -23,8 +26,31 @@ public abstract class TheDatabase extends RoomDatabase {
         if(instance==null){
             instance = Room.databaseBuilder(context.getApplicationContext(),TheDatabase.class
                     ,"AppDatabase").fallbackToDestructiveMigration()
+                    .addCallback(roomCallBack)
                     .build();
         }
         return instance;
+    }
+    private static RoomDatabase.Callback roomCallBack = new RoomDatabase.Callback(){
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+        }
+    };
+    private  static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void>{
+        private NotesDao notesDao;
+
+        private PopulateDbAsyncTask(TheDatabase db){
+            notesDao=db.notesDao();
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            notesDao.insert(new Notes("Note 1", "DescriptionABC"));
+            notesDao.insert(new Notes("Note 2", "DescriptionDBC"));
+            notesDao.insert(new Notes("Note 3", "DescriptionEBC"));
+            notesDao.insert(new Notes("Note 4", "DescriptionFBC"));
+            notesDao.insert(new Notes("Note 5", "DescriptionGBC"));
+            return null;
+        }
     }
 }
