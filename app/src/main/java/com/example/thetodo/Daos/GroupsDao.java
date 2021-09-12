@@ -8,9 +8,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.thetodo.AppObjects.Groups;
-import com.example.thetodo.AppObjects.Notes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Dao

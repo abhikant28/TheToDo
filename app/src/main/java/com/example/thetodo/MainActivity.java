@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,28 +19,24 @@ import android.widget.TextView;
 import com.example.thetodo.AppObjects.Groups;
 import com.example.thetodo.AppObjects.Notes;
 import com.example.thetodo.AppObjects.Tasks;
+import com.example.thetodo.DataBase.TheViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TheViewModel viewModel;
+    public static TheViewModel viewModel;
     static public List<Tasks> myTasks = new ArrayList<>();
     static public List<Groups> myGroups = new ArrayList<>();
     static public List<Notes> allNotes = new ArrayList<>();
-    static boolean DATABASE=false;
-
-    SharedPreferences sharedPreferences;
 
     private RecyclerView task_RecyclerView;
-    Task_RecyclerView_Adapter task_adapter;
-    public Task_RecyclerView_Adapter.RecyclerViewClickListener task_listener;
+    public final Task_RecyclerView_Adapter task_adapter= new Task_RecyclerView_Adapter();
     private RecyclerView notes_group_RecyclerView;
     public Notes_Groups_RecyclerView_Adapter.RecyclerViewClickListener groups_listener;
     private RecyclerView notes_all_RecyclerView;
-    Notes_RecyclerView_Adapter allNotes_adapter;
-    public Notes_RecyclerView_Adapter.RecyclerViewClickListener allNotes_listener;
+    public final Notes_RecyclerView_Adapter allNotes_adapter = new Notes_RecyclerView_Adapter();
 
     private EditText ev_task_tapToAdd;
     private TextView tv_task_remind;
@@ -49,11 +45,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_notes_newGroup;
     private ImageButton ib_add_task;
 
-    public static List<Notes> getGroupNotes(String g_id) {
-        List<Notes> notes= new ArrayList<>();
-        return notes;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,10 +52,15 @@ public class MainActivity extends AppCompatActivity {
 
         viewModel= ViewModelProviders.of(this).get(TheViewModel.class);
         viewModel.getAllNotes().observe(this, new Observer<List<Notes>>() {
-
             @Override
             public void onChanged(List<Notes> notes) {
                     allNotes_adapter.setNotes(notes);
+            }
+        });
+        viewModel.getAllTasks().observe(this, new Observer<List<Tasks>>() {
+            @Override
+            public void onChanged(List<Tasks> tasks) {
+                task_adapter.setTasks(tasks);
             }
         });
 
@@ -81,10 +77,15 @@ public class MainActivity extends AppCompatActivity {
 
         setTaskAdapter();
         setAllNotesAdapter();
- //       setNotesGroupsAdapter();
+//       setNotesGroupsAdapter();
 
         ev_task_tapToAdd.addTextChangedListener(checkText);
-
+        tv_notes_newNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),EditNote.class));
+            }
+        });
     }
 
     private TextWatcher checkText = new TextWatcher() {
@@ -101,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
             }else{
                 ib_add_task.setClickable(false);
              //   ib_add_task.setBackgroundColor(Color.parseColor("#817E7E"));
-
             }
         }
 
@@ -120,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setTaskAdapter() {
-        task_adapter = new Task_RecyclerView_Adapter(myTasks, task_listener);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         task_RecyclerView.setLayoutManager(layoutManager);
         task_RecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -128,13 +127,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setAllNotesAdapter() {
-        allNotes_adapter = new Notes_RecyclerView_Adapter(allNotes_listener);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         notes_all_RecyclerView.setLayoutManager(layoutManager);
+        notes_all_RecyclerView.setHasFixedSize(true);
         notes_all_RecyclerView.setItemAnimator(new DefaultItemAnimator());
         notes_all_RecyclerView.setAdapter(allNotes_adapter);
+        allNotes_adapter.setOnItemClickListener(new Notes_RecyclerView_Adapter.OnItemClickListener() {
+            @Override
+            public void OnItemClick(Notes note) {
+                Intent intent = new Intent(MainActivity.this,EditNote.class);
+                intent.putExtra("isNew",false );
+                intent.putExtra("note_id",note.getN_id());
+                startActivity(intent);
+            }
+        });
     }
-
 
     private void demoTaskData() {
         myTasks.add(new Tasks("Daily Task 1",false,"Weekly"));
@@ -142,15 +149,6 @@ public class MainActivity extends AppCompatActivity {
         myTasks.add(new Tasks("Daily Task 3",false,"Weekly"));
         myTasks.add(new Tasks("Daily Task 4",true,"Weekly"));
         myTasks.add(new Tasks("Daily Task 5",false,"Weekly"));
-    }
-
-    private void demoNotesData(){
-        allNotes.add(new Notes("First Note","Content of the note",null));
-        allNotes.add(new Notes("Second Note","Content of the note",null));
-        allNotes.add(new Notes("Third Note","Content of the note",null));
-        allNotes.add(new Notes("Fourth Note","Content of the note",null));
-        allNotes.add(new Notes("Fifth Note","Content of the note",null));
-        allNotes.add(new Notes("Sixth Note","Content of the note",null));
     }
 
     private void demoGroupsData(){
@@ -164,9 +162,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void addTask(View view) {
         if(!ev_task_tapToAdd.getText().toString().isEmpty()){
-            myTasks.add(0, new Tasks(ev_task_tapToAdd.getText().toString(), false, "Daily"));
+            viewModel.insert( new Tasks(ev_task_tapToAdd.getText().toString(), false, "Once"));
             ev_task_tapToAdd.setText("");
-            task_adapter.notifyItemInserted(0);
+            task_adapter.notifyDataSetChanged();
         }
     }
+
 }

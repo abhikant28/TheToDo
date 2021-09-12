@@ -1,5 +1,7 @@
 package com.example.thetodo;
 
+import static com.example.thetodo.MainActivity.viewModel;
+
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,21 +20,18 @@ import java.util.List;
 
 public class Task_RecyclerView_Adapter extends RecyclerView.Adapter<Task_RecyclerView_Adapter.MyViewHolder> {
     private RecyclerViewClickListener listener;
+    private List<Tasks> tasks = new ArrayList<>();
 
-    public Task_RecyclerView_Adapter(List<Tasks> tasks, RecyclerViewClickListener listener){
-        this.listener= listener;
-    }
-
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private CheckBox rb_Tasks_completed;
+    public class MyViewHolder extends RecyclerView.ViewHolder{
+        private CheckBox cb_Tasks_completed;
         private TextView tv_type;
         private TextView tv_title;
 
         public MyViewHolder(@NonNull View view) {
             super(view);
             tv_type = view.findViewById(R.id.Main_Task_List_Item_Type);
-            rb_Tasks_completed= view.findViewById(R.id.Main_Task_List_Item_checkButton);
-            tv_title=view.findViewById(R.id.Main_Task_List_Item_Title);
+            cb_Tasks_completed = view.findViewById(R.id.Main_Task_List_Item_checkButton);
+            tv_title = view.findViewById(R.id.Main_Task_List_Item_Title);
 
             tv_title.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -41,68 +40,66 @@ public class Task_RecyclerView_Adapter extends RecyclerView.Adapter<Task_Recycle
                     tv_type.requestLayout();
                 }
             });
-            rb_Tasks_completed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            cb_Tasks_completed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if(b){
-                        MainActivity.myTasks.get(getAdapterPosition()).setCompleted(true);
+                    Tasks task= tasks.get(getAdapterPosition());
+                    if (b) {
                         tv_title.setPaintFlags(compoundButton.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                        MainActivity.myTasks.add(MainActivity.myTasks.get(getAdapterPosition()));
-                        MainActivity.myTasks.remove(getAdapterPosition());
-                        notifyItemRemoved(getAdapterPosition());
-                    }else{
-                        MainActivity.myTasks.get(getAdapterPosition()).setCompleted(false);
+                    } else {
                         tv_title.setPaintFlags(0);
-                        MainActivity.myTasks.add(newPosition(getAdapterPosition()),MainActivity.myTasks.get(getAdapterPosition()));
-                        MainActivity.myTasks.remove(getAdapterPosition());
-                    }
+                        }
+                    task.setCompleted(b);
+                    viewModel.update(task);
                 }
             });
-        }
-
-        @Override
-        public void onClick(View view) {
-            listener.onClick(view, getAdapterPosition());
         }
     }
 
     @NonNull
     @Override
     public Task_RecyclerView_Adapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.main_task_list_item, parent,false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_task_list_item, parent, false);
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull Task_RecyclerView_Adapter.MyViewHolder holder, int position) {
-    String Title = MainActivity.myTasks.get(position).getTitle();
-    String type= MainActivity.myTasks.get(position).getType();
-    boolean completed = MainActivity.myTasks.get(position).isCompleted();
+        Tasks task = tasks.get(position);
 
-    holder.tv_title.setText(Title);
-    holder.tv_type.setText(type);
-    holder.rb_Tasks_completed.setChecked(completed);
-        if(completed) {
-            holder.tv_title.setPaintFlags(holder.rb_Tasks_completed.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        holder.tv_title.setText(task.getTitle());
+        holder.tv_type.setText(task.getType());
+        holder.cb_Tasks_completed.setChecked(task.isCompleted());
+        if (task.isCompleted()) {
+            holder.tv_title.setPaintFlags(holder.cb_Tasks_completed.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
     }
 
     @Override
     public int getItemCount() {
-        return MainActivity.myTasks.size();
+        return tasks.size();
     }
 
-    public interface RecyclerViewClickListener{
+    public interface RecyclerViewClickListener {
         void onClick(View v, int position);
     }
 
-    private int newPosition(int currentPosition){
-        int newPosition=currentPosition;
-
-        for (;newPosition>=0;newPosition--){
-            if(!MainActivity.myTasks.get(newPosition).isCompleted())
-            {break;}
-        }
-        return newPosition;
+    //    private int newPosition(int currentPosition){
+//        int newPosition=currentPosition;
+//
+//        for (;newPosition>=0;newPosition--){
+//            if(!MainActivity.myTasks.get(newPosition).isCompleted())
+//            {break;}
+//        }
+//        return newPosition;
+//    }
+    public void setTasks(List<Tasks> tasks) {
+        this.tasks = tasks;
+        notifyDataSetChanged();
     }
+
+    public interface OnItemClickListener {
+        void OnItemClick(Tasks tasks);
+    }
+
 }

@@ -19,7 +19,6 @@ import java.util.List;
 
 public class Notes_Groups_RecyclerView_Adapter extends RecyclerView.Adapter<Notes_Groups_RecyclerView_Adapter.MyViewHolder> {
     private Notes_Groups_RecyclerView_Adapter.RecyclerViewClickListener listener;
-    Notes_RecyclerView_Adapter.RecyclerViewClickListener notes_listener;
     public Context cxt;
 
     private List<Groups> groups;

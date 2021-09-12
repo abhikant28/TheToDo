@@ -1,5 +1,6 @@
 package com.example.thetodo.AppObjects;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -9,9 +10,11 @@ import java.util.Date;
 public class Notes {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "n_id")
     private int n_id;
 
     private String title,body,date;
+
     private int g_id;
     private boolean show;
 

@@ -1,6 +1,12 @@
 package com.example.thetodo.AppObjects;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "tasks_table")
 public class Tasks {
+
+    @PrimaryKey(autoGenerate = true)
     private int t_id;
     private String title;
     private boolean completed;
@@ -10,6 +16,22 @@ public class Tasks {
         this.title = title;
         this.completed = completed;
         this.type= type;
+    }
+
+    public int getT_id() {
+        return t_id;
+    }
+
+    public void setT_id(int t_id) {
+        this.t_id = t_id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getType() {
