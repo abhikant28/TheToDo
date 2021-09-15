@@ -30,7 +30,8 @@
             android:orientation="vertical">
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="10dp">
             <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,6 +83,10 @@
                 android:layout_height="wrap_content"
                 android:text="+ New Note"
                 android:padding="15dp"
+                android:gravity="center"
+                android:background="@drawable/round_back"
+                android:layout_margin="5dp"
+                android:textSize="18dp"
                 android:layout_weight="1"/>
 
             <TextView
@@ -89,6 +94,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="+ New Group"
+                android:gravity="center"
+                android:layout_margin="5dp"
+                android:background="@drawable/round_back"
+                android:textSize="18dp"
                 android:padding="15dp"/>
         </LinearLayout>
         <TextView
@@ -102,6 +111,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/main_super_list_item_note"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/Main_Notes_Super_RecyclerView"
             android:layout_width="match_parent"

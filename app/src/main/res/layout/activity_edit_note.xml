@@ -21,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#F4F42E"
+        android:padding="15dp"
         android:hint="Title"/>
 
     <EditText

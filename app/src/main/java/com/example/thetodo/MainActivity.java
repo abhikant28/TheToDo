@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         setTaskAdapter();
         setAllNotesAdapter();
-       setNotesGroupsAdapter();
+        setNotesGroupsAdapter();
 
         ev_task_tapToAdd.addTextChangedListener(checkText);
         tv_notes_newNote.setOnClickListener(new View.OnClickListener() {
@@ -156,14 +156,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-//    private void demoTaskData() {
-//        myTasks.add(new Tasks("Daily Task 1",false,"Weekly"));
-//        myTasks.add(new Tasks("Daily Task 2",false,"Weekly"));
-//        myTasks.add(new Tasks("Daily Task 3",false,"Weekly"));
-//        myTasks.add(new Tasks("Daily Task 4",true,"Weekly"));
-//        myTasks.add(new Tasks("Daily Task 5",false,"Weekly"));
-//    }
 
     public void addTask(View view) {
         if(!ev_task_tapToAdd.getText().toString().isEmpty()){
