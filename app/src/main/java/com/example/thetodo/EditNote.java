@@ -17,6 +17,7 @@ public class EditNote extends AppCompatActivity {
     private TheViewModel viewModel;
     private EditText ev_title, ev_desc;
     private int n_id;
+    private int g_id=0;
     private Notes theNote;
     private boolean isNew = true;
 
@@ -33,7 +34,7 @@ public class EditNote extends AppCompatActivity {
 
         Intent extras = getIntent();
         if (extras.getBooleanExtra("isNew", true)) {
-
+            g_id=extras.getIntExtra("g_id", 0);
         } else {
             n_id = extras.getIntExtra("note_id", 0);
             theNote = viewModel.getNote(n_id);
@@ -57,6 +58,7 @@ public class EditNote extends AppCompatActivity {
         String desc = ev_desc.getText().toString();
         if (isNew) {
             Notes note = new Notes(title.trim(), desc, 0);
+            note.setG_id(g_id);
             viewModel.insert(note);
             isNew = false;
         } else {

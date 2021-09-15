@@ -12,6 +12,7 @@ import com.example.thetodo.Daos.GroupsDao;
 import com.example.thetodo.Daos.NotesDao;
 import com.example.thetodo.Daos.TasksDao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -69,6 +70,16 @@ public class TheRepository {
     }
     public LiveData<List<Notes>> getAllNotes(){
         return allNotes;
+    }
+    public List<Notes> getGroupNotes(Integer g_id){
+        List<Notes> groupNotes= new ArrayList<>();
+        try {
+            groupNotes= new GetGroupNotesAsyncTask(notesDao).execute(g_id).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }return groupNotes;
     }
 
     public void insertGroup(Groups group){
@@ -181,6 +192,19 @@ public class TheRepository {
         protected Void doInBackground(Notes... notes) {
             notesDao.delete(notes[0]);
             return null;
+        }
+    }
+    private static class GetGroupNotesAsyncTask extends AsyncTask<Integer,Void,List<Notes>>{
+        private NotesDao notesDao;
+
+        public GetGroupNotesAsyncTask(NotesDao notesDao) {
+            this.notesDao = notesDao;
+        }
+
+        @Override
+        protected List<Notes> doInBackground(Integer... g_id) {
+            List<Notes> notes= notesDao.getGroupNotes(g_id[0]);
+            return notes;
         }
     }
 

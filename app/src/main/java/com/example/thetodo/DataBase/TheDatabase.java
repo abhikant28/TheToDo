@@ -53,21 +53,26 @@ public abstract class TheDatabase extends RoomDatabase {
         }
         @Override
         protected Void doInBackground(Void... voids) {
+            groupsDao.insert(new Groups("First Group","1 Aug,2021"));
+            groupsDao.insert(new Groups("Second Group","2 Aug,2022"));
+            groupsDao.insert(new Groups("Third Group","4 Aug,2023"));
+            groupsDao.insert(new Groups("Fourth Group","5 Aug,2024"));
+            groupsDao.insert(new Groups("Fifth Group","6 Aug,2025"));
 
-//            taskDao.insert(new Tasks("1st Task", false, "Daily"));
-//            taskDao.insert(new Tasks("2nd Task", false, "Weekly"));
-//            taskDao.insert(new Tasks("3rd Task", true, "Daily"));
-//            taskDao.insert(new Tasks("4th Task", true, "Annual"));
+            taskDao.insert(new Tasks("1st Task", false, "Daily"));
+            taskDao.insert(new Tasks("2nd Task", false, "Weekly"));
+            taskDao.insert(new Tasks("3rd Task", true, "Daily"));
+            taskDao.insert(new Tasks("4th Task", true, "Annual"));
 //            taskDao.insert(new Tasks("5th Task", false, "Annual"));
 //            taskDao.insert(new Tasks("6th Task", true, "Annual"));
 //            taskDao.insert(new Tasks("7th Task", false, "Annual"));
 //            taskDao.insert(new Tasks("8th Task", false, "Annual"));
-//
-//            notesDao.insert(new Notes("Note 1", "DescriptionABC",0));
-//            notesDao.insert(new Notes("Note 2", "DescriptionDBC",0));
-//            notesDao.insert(new Notes("Note 3", "DescriptionEBC",0));
-//            notesDao.insert(new Notes("Note 4", "DescriptionFBC",0));
-//            notesDao.insert(new Notes("Note 5", "DescriptionGBC",0));
+
+            notesDao.insert(new Notes("Note 1", "DescriptionABC",0));
+            notesDao.insert(new Notes("Note 2", "DescriptionDBC",0));
+            notesDao.insert(new Notes("Note 3", "DescriptionEBC",0));
+            notesDao.insert(new Notes("Note 4", "DescriptionFBC",0));
+            notesDao.insert(new Notes("Note 5", "DescriptionGBC",0));
             return null;
         }
     }

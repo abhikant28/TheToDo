@@ -57,6 +57,9 @@ public class TheViewModel extends AndroidViewModel {
     public LiveData<List<Notes>> getAllNotes(){
         return allNotes;
     }
+    public List<Notes> getGroupNotes(Integer g_id){
+        return repository.getGroupNotes(g_id);
+    }
 
 
     public void insert(Groups group){

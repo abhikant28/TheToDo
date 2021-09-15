@@ -1,5 +1,7 @@
 package com.example.thetodo;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -27,16 +29,14 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static TheViewModel viewModel;
-    static public List<Tasks> myTasks = new ArrayList<>();
-    static public List<Groups> myGroups = new ArrayList<>();
-    static public List<Notes> allNotes = new ArrayList<>();
 
     private RecyclerView task_RecyclerView;
     public final Task_RecyclerView_Adapter task_adapter= new Task_RecyclerView_Adapter();
     private RecyclerView notes_group_RecyclerView;
-    public Notes_Groups_RecyclerView_Adapter.RecyclerViewClickListener groups_listener;
     private RecyclerView notes_all_RecyclerView;
     public final Notes_RecyclerView_Adapter allNotes_adapter = new Notes_RecyclerView_Adapter();
+    public final Notes_Groups_RecyclerView_Adapter notes_groups_adapter = new Notes_Groups_RecyclerView_Adapter();
+
 
     private EditText ev_task_tapToAdd;
     private TextView tv_task_remind;
@@ -63,6 +63,12 @@ public class MainActivity extends AppCompatActivity {
                 task_adapter.setTasks(tasks);
             }
         });
+        viewModel.getAllGroups().observe(this, new Observer<List<Groups>>() {
+            @Override
+            public void onChanged(List<Groups> groups) {
+                notes_groups_adapter.setGroups(groups);
+            }
+        });
 
         task_RecyclerView=findViewById(R.id.Main_Super_Task_RecyclerView);
         notes_group_RecyclerView=findViewById(R.id.Main_Notes_Super_RecyclerView);
@@ -77,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         setTaskAdapter();
         setAllNotesAdapter();
-//       setNotesGroupsAdapter();
+       setNotesGroupsAdapter();
 
         ev_task_tapToAdd.addTextChangedListener(checkText);
         tv_notes_newNote.setOnClickListener(new View.OnClickListener() {
@@ -112,11 +118,19 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void setNotesGroupsAdapter() {
-        Notes_Groups_RecyclerView_Adapter adapter = new Notes_Groups_RecyclerView_Adapter(myGroups, groups_listener);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         notes_group_RecyclerView.setLayoutManager(layoutManager);
         notes_group_RecyclerView.setItemAnimator(new DefaultItemAnimator());
-        notes_group_RecyclerView.setAdapter(adapter);
+        notes_group_RecyclerView.setAdapter(notes_groups_adapter);
+        notes_groups_adapter.setOnItemClickListener(new Notes_Groups_RecyclerView_Adapter.OnItemClickListener() {
+            @Override
+            public void OnItemClick(Groups group) {
+                Intent intent= new Intent(MainActivity.this,EditNote.class);
+                intent.putExtra("isNew", true);
+                intent.putExtra("g_id", group.getG_id());
+                startActivity(intent);
+            }
+        });
     }
 
     private void setTaskAdapter() {
@@ -143,22 +157,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void demoTaskData() {
-        myTasks.add(new Tasks("Daily Task 1",false,"Weekly"));
-        myTasks.add(new Tasks("Daily Task 2",false,"Weekly"));
-        myTasks.add(new Tasks("Daily Task 3",false,"Weekly"));
-        myTasks.add(new Tasks("Daily Task 4",true,"Weekly"));
-        myTasks.add(new Tasks("Daily Task 5",false,"Weekly"));
-    }
-
-    private void demoGroupsData(){
-        myGroups.add(new Groups("First Group","1 Aug,2021"));
-        myGroups.add(new Groups("Second Group","2 Aug,2022"));
-        myGroups.add(new Groups("Third Group","4 Aug,2023"));
-        myGroups.add(new Groups("Fourth Group","5 Aug,2024"));
-        myGroups.add(new Groups("Fifth Group","6 Aug,2025"));
-
-    }
+//    private void demoTaskData() {
+//        myTasks.add(new Tasks("Daily Task 1",false,"Weekly"));
+//        myTasks.add(new Tasks("Daily Task 2",false,"Weekly"));
+//        myTasks.add(new Tasks("Daily Task 3",false,"Weekly"));
+//        myTasks.add(new Tasks("Daily Task 4",true,"Weekly"));
+//        myTasks.add(new Tasks("Daily Task 5",false,"Weekly"));
+//    }
 
     public void addTask(View view) {
         if(!ev_task_tapToAdd.getText().toString().isEmpty()){
