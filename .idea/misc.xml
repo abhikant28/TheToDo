@@ -3,16 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Work/TheToDo/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.26614583333333336" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/drawable/round_back.xml" value="0.26614583333333336" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/drawable/round_box.xml" value="0.26614583333333336" />
+        <entry key="..\:/Work/TheToDo/app/src/main/res/drawable/task_add_button_bg.xml" value="0.26614583333333336" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/activity_edit_note.xml" value="0.25" />
-        <entry key="..\:/Work/TheToDo/app/src/main/res/layout/activity_main.xml" value="0.13389121338912133" />
+        <entry key="..\:/Work/TheToDo/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_list_item.xml" value="0.25" />
+        <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_new_group_dialog.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_recycler_super_list_item.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_recycler_super_list_item_group.xml" value="0.264" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_super_list_item.xml" value="0.264" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_super_list_item_note.xml" value="0.264" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_task_list_item.xml" value="0.264" />
+        <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_task_repeat_dialog.xml" value="0.25" />
       </map>
     </option>
   </component>

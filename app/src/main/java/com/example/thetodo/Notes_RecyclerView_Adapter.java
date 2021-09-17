@@ -33,10 +33,14 @@ public class Notes_RecyclerView_Adapter extends RecyclerView.Adapter<Notes_Recyc
         String about = notes.get(position).getBody();
         String date = notes.get(position).getDate();
 
-        if (title.length() != 0) {
+        if (title.length()== 0) {
+            holder.tv_title.setText(about);
+            holder.tv_full.setText("");
+        }else{
             holder.tv_title.setText(title);
+            holder.tv_full.setText(about);
         }
-        holder.tv_full.setText(about);
+
         holder.tv_date.setText(date);
     }
 

@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".EditNote"
-    android:background="#FFFF99">
+    tools:context=".EditNote">
+<!--    android:background="#FFFF99">-->
 
 <LinearLayout
     android:orientation="vertical"
@@ -20,7 +20,6 @@
         android:id="@+id/NotesEditor_EditTextView_Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F4F42E"
         android:padding="15dp"
         android:hint="Title"/>
 

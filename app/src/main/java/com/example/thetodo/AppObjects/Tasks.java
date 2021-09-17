@@ -11,11 +11,13 @@ public class Tasks {
     private String title;
     private boolean completed;
     private String type;
+//    private String next;
 
     public Tasks(String title, boolean completed, String type) {
         this.title = title;
         this.completed = completed;
         this.type= type;
+
     }
 
     public int getT_id() {

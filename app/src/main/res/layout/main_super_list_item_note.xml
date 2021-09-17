@@ -6,7 +6,9 @@
     android:elevation="10dp"
     android:layout_marginTop="3dp"
     android:background="@drawable/round_back"
-    app:cardCornerRadius="5dp">
+    app:cardCornerRadius="5dp"
+    android:padding="2dp"
+    android:paddingHorizontal="8dp">
 
         <LinearLayout
             android:id="@+id/Main_RecyclerView_List_Item_LinearLayout1"

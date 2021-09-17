@@ -16,13 +16,13 @@
         android:checked="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text=""
         style="@android:style/Widget.DeviceDefault.Light.CompoundButton.RadioButton"/>
     <TextView
         android:id="@+id/Main_Task_List_Item_Title"
         android:layout_width="0dp"
         android:layout_height="28dp"
         android:layout_gravity="center"
-        android:text="Task Title"
         android:layout_weight="1"
         android:ellipsize="end"/>
     <TextView

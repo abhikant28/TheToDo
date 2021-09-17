@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">TheToDo</string>
+    <string-array name="repeat_options">
+        <item id="once">Never</item>
+        <item id="daily">Every Day</item>
+        <item id="weekly">Every Week</item>
+        <item id="yearly">Every Year</item>
+    </string-array>
 </resources>

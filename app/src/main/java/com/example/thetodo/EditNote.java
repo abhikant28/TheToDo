@@ -12,12 +12,14 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.thetodo.AppObjects.Notes;
 import com.example.thetodo.DataBase.TheViewModel;
 
+import java.util.Date;
+
 public class EditNote extends AppCompatActivity {
 
     private TheViewModel viewModel;
     private EditText ev_title, ev_desc;
     private int n_id;
-    private int g_id=0;
+    private int g_id;
     private Notes theNote;
     private boolean isNew = true;
 
@@ -62,9 +64,13 @@ public class EditNote extends AppCompatActivity {
             viewModel.insert(note);
             isNew = false;
         } else {
-            theNote.setTitle(title);
-            theNote.setBody(desc);
-            viewModel.update(theNote);
+            if(title!= theNote.getTitle()||desc !=theNote.getBody()){
+                theNote.setTitle(title);
+                theNote.setBody(desc);
+                Date getDate=java.util.Calendar.getInstance().getTime();
+                theNote.setDate(String.valueOf(getDate).substring(0, 10));
+                viewModel.update(theNote);
+            }
         }
 
     }

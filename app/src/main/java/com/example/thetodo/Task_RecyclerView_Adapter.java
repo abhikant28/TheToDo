@@ -98,8 +98,13 @@ public class Task_RecyclerView_Adapter extends RecyclerView.Adapter<Task_Recycle
         notifyDataSetChanged();
     }
 
+    public Tasks getTask(int position){
+        return tasks.get(position);
+    }
+
     public interface OnItemClickListener {
         void OnItemClick(Tasks tasks);
     }
+
 
 }
