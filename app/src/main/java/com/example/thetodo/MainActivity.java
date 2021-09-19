@@ -1,5 +1,23 @@
 package com.example.thetodo;
 
+import android.app.AlarmManager;
+import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -8,22 +26,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.example.thetodo.AppObjects.Groups;
 import com.example.thetodo.AppObjects.Notes;
@@ -39,10 +41,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static TheViewModel viewModel;
-    public static Tasks theTask= new Tasks(null, false, "Once");
+    public static Tasks theTask = new Tasks("", false, "Once");
+    private Calendar calen;
 
     private RecyclerView task_RecyclerView;
-    public final Task_RecyclerView_Adapter task_adapter= new Task_RecyclerView_Adapter();
+    public final Task_RecyclerView_Adapter task_adapter = new Task_RecyclerView_Adapter();
     private RecyclerView notes_group_RecyclerView;
     private RecyclerView notes_all_RecyclerView;
     public final Notes_RecyclerView_Adapter allNotes_adapter = new Notes_RecyclerView_Adapter();
@@ -61,11 +64,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        viewModel= ViewModelProviders.of(this).get(TheViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(TheViewModel.class);
         viewModel.getAllNotes().observe(this, new Observer<List<Notes>>() {
             @Override
             public void onChanged(List<Notes> notes) {
-                    allNotes_adapter.setNotes(notes);
+                allNotes_adapter.setNotes(notes);
             }
         });
         viewModel.getAllTasks().observe(this, new Observer<List<Tasks>>() {
@@ -81,32 +84,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        task_RecyclerView=findViewById(R.id.Main_Super_Task_RecyclerView);
-        notes_group_RecyclerView=findViewById(R.id.Main_Notes_Super_RecyclerView);
-        notes_all_RecyclerView=findViewById(R.id.Main_Super_RecyclerView_AllNotes_List);
-        ev_task_tapToAdd=findViewById(R.id.Main_Task_TapToAdd);
-        b_add_task =findViewById(R.id.Main_Task_ImageButton_AddButton);
-        tv_task_remind=findViewById(R.id.Main_Task_TextView_Remind);
-        tv_task_repeat=findViewById(R.id.Main_Task_TextView_Repeat);
-        tv_notes_newGroup=findViewById(R.id.Main_Notes_TextView_NewNoteGroup);
-        tv_notes_newNote=findViewById(R.id.Main_Notes_TextView_NewNote);
+        task_RecyclerView = findViewById(R.id.Main_Super_Task_RecyclerView);
+        notes_group_RecyclerView = findViewById(R.id.Main_Notes_Super_RecyclerView);
+        notes_all_RecyclerView = findViewById(R.id.Main_Super_RecyclerView_AllNotes_List);
+        ev_task_tapToAdd = findViewById(R.id.Main_Task_TapToAdd);
+        b_add_task = findViewById(R.id.Main_Task_ImageButton_AddButton);
+        tv_task_remind = findViewById(R.id.Main_Task_TextView_Remind);
+        tv_task_repeat = findViewById(R.id.Main_Task_TextView_Repeat);
+        tv_notes_newGroup = findViewById(R.id.Main_Notes_TextView_NewNoteGroup);
+        tv_notes_newNote = findViewById(R.id.Main_Notes_TextView_NewNote);
 
         setTaskAdapter();
         setAllNotesAdapter();
         setNotesGroupsAdapter();
-        
+
         tv_task_remind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!ev_task_tapToAdd.getText().toString().isEmpty()){
-                    setTaskTimeDate();
+                if (!ev_task_tapToAdd.getText().toString().isEmpty()) {
+                    calen = setTaskTimeDate();
                 }
             }
         });
         tv_task_repeat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!ev_task_tapToAdd.getText().toString().isEmpty()){
+                if (!ev_task_tapToAdd.getText().toString().isEmpty()) {
                     openRepeatTaskDialog();
                 }
             }
@@ -115,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         tv_notes_newNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),EditNote.class));
+                startActivity(new Intent(getApplicationContext(), EditNote.class));
             }
         });
         tv_notes_newGroup.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
@@ -133,11 +136,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                Tasks task =task_adapter.getTask(viewHolder.getAdapterPosition());
-                if(task.isCompleted()){
+                Tasks task = task_adapter.getTask(viewHolder.getAdapterPosition());
+                if (task.isCompleted()) {
                     viewModel.delete(task);
                     Toast.makeText(MainActivity.this, "Task removed", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     task_adapter.notifyDataSetChanged();
                     Toast.makeText(MainActivity.this, "Complete Task to remove", Toast.LENGTH_SHORT).show();
                 }
@@ -146,42 +149,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openRepeatTaskDialog() {
-        TaskRepeat_Dialog taskRepeat_dialog= new TaskRepeat_Dialog();
+        TaskRepeat_Dialog taskRepeat_dialog = new TaskRepeat_Dialog();
         taskRepeat_dialog.show(getSupportFragmentManager(), "Repeat");
     }
 
-    private void setTaskTimeDate() {
-        final Calendar calendar=Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
+    private Calendar setTaskTimeDate() {
+        final Calendar calendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendar.set(Calendar.YEAR,year);
-                calendar.set(Calendar.MONTH,month);
-                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
-                        calendar.set(Calendar.MINUTE,minute);
+                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        calendar.set(Calendar.MINUTE, minute);
 
-                        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
-                        Log.i("DATE TIME::::", simpleDateFormat.format(calendar.getTime()));
-                       // date_time_in.setText(simpleDateFormat.format(calendar.getTime()));
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm");
+//                        Log.i("DATE TIME::::", simpleDateFormat.format(calendar.getTime()));
+                        tv_task_remind.setText(simpleDateFormat.format(calendar.getTime()));
                     }
                 };
 
-                new TimePickerDialog(MainActivity.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
+                new TimePickerDialog(MainActivity.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show();
             }
         };
 
-        new DatePickerDialog(MainActivity.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
-
+        new DatePickerDialog(MainActivity.this, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+        return calendar;
     }
 
     private void openNewGroupDialog() {
-        NewGroup_Dialog newGroup_dialog=new NewGroup_Dialog();
-        newGroup_dialog.show(getSupportFragmentManager(),"New Group");
+        NewGroup_Dialog newGroup_dialog = new NewGroup_Dialog();
+        newGroup_dialog.show(getSupportFragmentManager(), "New Group");
     }
 
     private TextWatcher checkText = new TextWatcher() {
@@ -192,13 +195,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-            if(charSequence.length()>0){
+            if (charSequence.length() > 0) {
                 b_add_task.setClickable(true);
                 tv_task_remind.setClickable(true);
                 tv_task_repeat.setClickable(true);
                 b_add_task.setBackgroundColor(Color.parseColor("#FF6DC530"));
-            }else{
-                theTask =null;
+            } else {
+                theTask = null;
                 b_add_task.setClickable(false);
                 tv_task_remind.setClickable(false);
                 tv_task_repeat.setClickable(false);
@@ -208,7 +211,18 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-
+            if (editable.toString().length() > 0) {
+                b_add_task.setClickable(true);
+                tv_task_remind.setClickable(true);
+                tv_task_repeat.setClickable(true);
+                b_add_task.setBackgroundColor(Color.parseColor("#FF6DC530"));
+            } else {
+                theTask=new Tasks("", false, "Once");
+                b_add_task.setClickable(false);
+                tv_task_remind.setClickable(false);
+                tv_task_repeat.setClickable(false);
+                b_add_task.setBackgroundColor(Color.parseColor("#817E7E"));
+            }
         }
     };
 
@@ -220,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
         notes_groups_adapter.setOnItemClickListener(new Notes_Groups_RecyclerView_Adapter.OnItemClickListener() {
             @Override
             public void OnItemClick(Groups group) {
-                Intent intent= new Intent(MainActivity.this,EditNote.class);
+                Intent intent = new Intent(MainActivity.this, EditNote.class);
                 intent.putExtra("isNew", true);
                 intent.putExtra("g_id", group.getG_id());
                 startActivity(intent);
@@ -244,23 +258,41 @@ public class MainActivity extends AppCompatActivity {
         allNotes_adapter.setOnItemClickListener(new Notes_RecyclerView_Adapter.OnItemClickListener() {
             @Override
             public void OnItemClick(Notes note) {
-                Intent intent = new Intent(MainActivity.this,EditNote.class);
-                intent.putExtra("isNew",false );
-                intent.putExtra("note_id",note.getN_id());
+                Intent intent = new Intent(MainActivity.this, EditNote.class);
+                intent.putExtra("isNew", false);
+                intent.putExtra("note_id", note.getN_id());
                 startActivity(intent);
             }
         });
     }
 
     public void addTask(View view) {
-        if(!ev_task_tapToAdd.getText().toString().isEmpty()){
-            theTask.setTitle(ev_task_tapToAdd.getText().toString());
-            theTask.setCompleted(false);
+        if (!ev_task_tapToAdd.getText().toString().isEmpty()) {
+            theTask.getType();
             viewModel.insert(theTask);
-            theTask = new Tasks("", false, "Once");
+
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            if (calen.before(Calendar.getInstance())) {
+                calen.add(Calendar.DATE, 1);
+            }
+            Intent intent = new Intent(this, AlertReceiver.class);
+            intent.putExtra("title", "Reminder : ");
+            intent.putExtra("body", theTask.getTitle());
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, theTask.getT_id(), intent, 0);
+
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calen.getTimeInMillis(), pendingIntent);
+            theTask=new Tasks("", false, "Once");
             ev_task_tapToAdd.setText("");
+            tv_task_remind.setText("Remind");
             task_adapter.notifyDataSetChanged();
         }
     }
 
+    public void cancelAlarm() {
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, theTask.getT_id(), intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+
+    }
 }
