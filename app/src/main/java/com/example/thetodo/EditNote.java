@@ -1,11 +1,19 @@
 package com.example.thetodo;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.MediaController;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -22,6 +30,10 @@ public class EditNote extends AppCompatActivity {
     private int g_id;
     private Notes theNote;
     private boolean isNew = true;
+    final int CAMERA_INTENT= 51;
+    final int IMAGE_EDITOR_INTENT=50;
+    private Bitmap bmpImg;
+    private ImageView iv_image;
 
 
     @Override
@@ -33,6 +45,7 @@ public class EditNote extends AppCompatActivity {
 
         ev_title = findViewById(R.id.NotesEditor_EditTextView_Title);
         ev_desc = findViewById(R.id.NotesEditor_EditTextView_all);
+        iv_image=findViewById(R.id.NotesEditor_ImageView_image);
 
         Intent extras = getIntent();
         if (extras.getBooleanExtra("isNew", true)) {
@@ -75,22 +88,59 @@ public class EditNote extends AppCompatActivity {
 
     }
 
-    private TextWatcher checkText = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+    public void takePicture(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if(intent.resolveActivity(getPackageManager())!=null){
+            Log.i("TAKePIC", "Triggered");
+            startActivityForResult(intent, CAMERA_INTENT);
         }
+    }
 
-        @Override
-        public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case CAMERA_INTENT:
+                if(resultCode== Activity.RESULT_OK){
+                    bmpImg=(Bitmap) data.getExtras().get("data");
+                    if(bmpImg!=null){
+                        Intent intent= new Intent(this,ImageEditor.class);
+                        intent.putExtra("img", bmpImg);
+                        startActivityForResult(intent,IMAGE_EDITOR_INTENT);
+                    }
+                }
+                break;
+            case IMAGE_EDITOR_INTENT:
+                if(resultCode==Activity.RESULT_OK){
+                    bmpImg=(Bitmap) data.getExtras().get("data");
+                    if(bmpImg!=null){
+                        iv_image.setImageBitmap(bmpImg);
+                    }
+                    }else{}
+                break;
         }
+    }
 
-        @Override
-        public void afterTextChanged(Editable editable) {
+    public void pic(View view) {
+        takePicture();
+    }
 
-        }
-    };
+    //    private TextWatcher checkText = new TextWatcher() {
+//        @Override
+//        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//        }
+//
+//        @Override
+//        public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+//
+//        }
+//
+//        @Override
+//        public void afterTextChanged(Editable editable) {
+//
+//        }
+//    };
 
 
 }

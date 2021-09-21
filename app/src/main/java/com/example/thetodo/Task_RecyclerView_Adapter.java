@@ -11,16 +11,33 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.thetodo.AppObjects.Notes;
 import com.example.thetodo.AppObjects.Tasks;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Task_RecyclerView_Adapter extends RecyclerView.Adapter<Task_RecyclerView_Adapter.MyViewHolder> {
+public class Task_RecyclerView_Adapter extends ListAdapter<Tasks,Task_RecyclerView_Adapter.MyViewHolder> {
     private RecyclerViewClickListener listener;
-    private List<Tasks> tasks = new ArrayList<>();
+    private  static final DiffUtil.ItemCallback<Tasks> DIFF_CALLBACK_TASKS = new DiffUtil.ItemCallback<Tasks>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Tasks oldItem, @NonNull Tasks newItem) {
+            return oldItem.getT_id()== newItem.getT_id();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Tasks oldItem, @NonNull Tasks newItem) {
+            return false;
+        }
+    };
+
+    protected Task_RecyclerView_Adapter() {
+        super(DIFF_CALLBACK_TASKS);
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         private CheckBox cb_Tasks_completed;
@@ -43,7 +60,7 @@ public class Task_RecyclerView_Adapter extends RecyclerView.Adapter<Task_Recycle
             cb_Tasks_completed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    Tasks task= tasks.get(getAdapterPosition());
+                    Tasks task= getItem(getAdapterPosition());
                     if (b) {
                         tv_title.setPaintFlags(compoundButton.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     } else {
@@ -65,7 +82,7 @@ public class Task_RecyclerView_Adapter extends RecyclerView.Adapter<Task_Recycle
 
     @Override
     public void onBindViewHolder(@NonNull Task_RecyclerView_Adapter.MyViewHolder holder, int position) {
-        Tasks task = tasks.get(position);
+        Tasks task = getItem(position);
 
         holder.tv_title.setText(task.getTitle());
         holder.tv_type.setText(task.getType());
@@ -73,11 +90,6 @@ public class Task_RecyclerView_Adapter extends RecyclerView.Adapter<Task_Recycle
         if (task.isCompleted()) {
             holder.tv_title.setPaintFlags(holder.cb_Tasks_completed.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return tasks.size();
     }
 
     public interface RecyclerViewClickListener {
@@ -93,13 +105,8 @@ public class Task_RecyclerView_Adapter extends RecyclerView.Adapter<Task_Recycle
 //        }
 //        return newPosition;
 //    }
-    public void setTasks(List<Tasks> tasks) {
-        this.tasks = tasks;
-        notifyDataSetChanged();
-    }
-
     public Tasks getTask(int position){
-        return tasks.get(position);
+        return getItem(position);
     }
 
     public interface OnItemClickListener {

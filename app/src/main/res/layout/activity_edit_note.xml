@@ -30,6 +30,12 @@
         android:gravity="start"
         android:hint="Type away...."
         android:layout_weight="1"/>
+    <ImageView
+        android:onClick="pic"
+        android:src="@mipmap/ic_launcher"
+        android:id="@+id/NotesEditor_ImageView_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
 </LinearLayout>

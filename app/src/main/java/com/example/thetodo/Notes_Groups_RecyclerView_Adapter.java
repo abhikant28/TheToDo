@@ -13,7 +13,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.thetodo.AppObjects.Groups;
@@ -22,11 +24,26 @@ import com.example.thetodo.AppObjects.Notes;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Notes_Groups_RecyclerView_Adapter extends RecyclerView.Adapter<Notes_Groups_RecyclerView_Adapter.MyViewHolder> {
+public class Notes_Groups_RecyclerView_Adapter extends ListAdapter<Groups,Notes_Groups_RecyclerView_Adapter.MyViewHolder> {
 
-    private List<Groups> groups=new ArrayList<>();
     private Notes_Groups_RecyclerView_Adapter.OnItemClickListener listener;
     Context cxt;
+    private static final DiffUtil.ItemCallback<Groups> DIFF_CALLBACK_NOTES_GROUPS = new DiffUtil.ItemCallback<Groups>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Groups oldItem, @NonNull Groups newItem) {
+            return oldItem.getG_id()== newItem.getG_id();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Groups oldItem, @NonNull Groups newItem) {
+            return false;
+        }
+    };
+
+    public Notes_Groups_RecyclerView_Adapter() {
+        super(DIFF_CALLBACK_NOTES_GROUPS);
+    }
+
 
     @NonNull
     @Override
@@ -37,26 +54,20 @@ public class Notes_Groups_RecyclerView_Adapter extends RecyclerView.Adapter<Note
 
     @Override
     public void onBindViewHolder(@NonNull Notes_Groups_RecyclerView_Adapter.MyViewHolder holder, int position) {
-        String title= groups.get(position).getTitle();
-        String date=groups.get(position).getDate();
+        String title= getItem(position).getTitle();
+        String date=getItem(position).getDate();
         List<Notes> groupNotes=new ArrayList<>();
 
         holder.tv_date.setText(date);
         holder.tv_title.setText(title);
-        groupNotes= viewModel.getGroupNotes(groups.get(position).getG_id());
+        groupNotes= viewModel.getGroupNotes(getItem(position).getG_id());
 
         Notes_RecyclerView_Adapter adapter = new Notes_RecyclerView_Adapter();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(cxt);
         holder.rv_notes.setLayoutManager(layoutManager);
         holder.rv_notes.setItemAnimator(new DefaultItemAnimator());
         holder.rv_notes.setAdapter(adapter);
-        adapter.setNotes(groupNotes);
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return groups.size();
+        adapter.submitList(groupNotes);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -75,17 +86,13 @@ public class Notes_Groups_RecyclerView_Adapter extends RecyclerView.Adapter<Note
                 @Override
                 public void onClick(View view) {
                     if (listener != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
-                        listener.OnItemClick(groups.get(getAdapterPosition()));
+                        listener.OnItemClick(getItem(getAdapterPosition()));
                     }
                 }
             });
         }
     }
 
-    public void setGroups(List<Groups> groups){
-        this.groups=groups;
-        notifyDataSetChanged();
-    }
     public interface OnItemClickListener {
         void OnItemClick(Groups group);
     }

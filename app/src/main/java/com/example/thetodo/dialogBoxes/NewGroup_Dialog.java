@@ -5,6 +5,7 @@ import static com.example.thetodo.MainActivity.viewModel;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -40,6 +41,7 @@ public class NewGroup_Dialog extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (!ev_group_name.getText().toString().isEmpty()) {
+                            Log.i("GROUP::::", "Created....");
                             viewModel.insert(new Groups(ev_group_name.getText().toString(), "Date"));
                         }
                     }

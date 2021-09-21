@@ -7,6 +7,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.example.thetodo.AppObjects.Notes;
 import com.example.thetodo.AppObjects.Tasks;
 
 import java.util.List;
@@ -22,6 +23,9 @@ public interface TasksDao {
 
     @Update
     void update(Tasks task);
+
+    @Query("SELECT * FROM tasks_table WHERE t_id= :t_id LIMIT 1")
+    Tasks getTask(int t_id);
 
     @Query("SELECT * FROM tasks_table ORDER BY completed ASC")
     LiveData<List<Tasks>> getAllTasks();

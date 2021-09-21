@@ -3,6 +3,8 @@ package com.example.thetodo.AppObjects;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Calendar;
+
 @Entity(tableName = "tasks_table")
 public class Tasks {
 
@@ -11,13 +13,21 @@ public class Tasks {
     private String title;
     private boolean completed;
     private String type;
-//    private String next;
+    private Calendar date;
 
     public Tasks(String title, boolean completed, String type) {
         this.title = title;
         this.completed = completed;
         this.type= type;
 
+    }
+
+    public Calendar getDate() {
+        return date;
+    }
+
+    public void setDate(Calendar date) {
+        this.date = date;
     }
 
     public int getT_id() {

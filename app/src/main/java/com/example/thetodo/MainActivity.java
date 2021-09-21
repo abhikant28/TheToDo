@@ -41,8 +41,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static TheViewModel viewModel;
-    public static Tasks theTask = new Tasks("", false, "Once");
+    public static Tasks theTask = new Tasks("", false, "");
     private Calendar calen;
+    private boolean setReminder=false;
 
     private RecyclerView task_RecyclerView;
     public final Task_RecyclerView_Adapter task_adapter = new Task_RecyclerView_Adapter();
@@ -68,19 +69,19 @@ public class MainActivity extends AppCompatActivity {
         viewModel.getAllNotes().observe(this, new Observer<List<Notes>>() {
             @Override
             public void onChanged(List<Notes> notes) {
-                allNotes_adapter.setNotes(notes);
+                allNotes_adapter.submitList(notes);
             }
         });
         viewModel.getAllTasks().observe(this, new Observer<List<Tasks>>() {
             @Override
             public void onChanged(List<Tasks> tasks) {
-                task_adapter.setTasks(tasks);
+                task_adapter.submitList(tasks);
             }
         });
         viewModel.getAllGroups().observe(this, new Observer<List<Groups>>() {
             @Override
             public void onChanged(List<Groups> groups) {
-                notes_groups_adapter.setGroups(groups);
+                notes_groups_adapter.submitList(groups);
             }
         });
 
@@ -138,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 Tasks task = task_adapter.getTask(viewHolder.getAdapterPosition());
                 if (task.isCompleted()) {
+                    cancelAlarm(task.getT_id());
                     viewModel.delete(task);
                     Toast.makeText(MainActivity.this, "Task removed", Toast.LENGTH_SHORT).show();
                 } else {
@@ -169,7 +171,6 @@ public class MainActivity extends AppCompatActivity {
                         calendar.set(Calendar.MINUTE, minute);
 
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm");
-//                        Log.i("DATE TIME::::", simpleDateFormat.format(calendar.getTime()));
                         tv_task_remind.setText(simpleDateFormat.format(calendar.getTime()));
                     }
                 };
@@ -179,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         new DatePickerDialog(MainActivity.this, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+        setReminder=true;
         return calendar;
     }
 
@@ -271,26 +273,28 @@ public class MainActivity extends AppCompatActivity {
             theTask.getType();
             viewModel.insert(theTask);
 
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            if (calen.before(Calendar.getInstance())) {
-                calen.add(Calendar.DATE, 1);
+            if(setReminder){
+                Intent intent = new Intent(this, AlertReceiver.class);
+                intent.putExtra("title", "Reminder : ");
+                intent.putExtra("body", theTask.getTitle());
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, theTask.getT_id(), intent, 0);
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                if (calen.before(Calendar.getInstance())) {
+                    calen.add(Calendar.DATE, 1);
+                }
+                theTask.setDate(calen);
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calen.getTimeInMillis(), pendingIntent);
+                setReminder=false;
             }
-            Intent intent = new Intent(this, AlertReceiver.class);
-            intent.putExtra("title", "Reminder : ");
-            intent.putExtra("body", theTask.getTitle());
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, theTask.getT_id(), intent, 0);
-
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calen.getTimeInMillis(), pendingIntent);
             theTask=new Tasks("", false, "Once");
             ev_task_tapToAdd.setText("");
             tv_task_remind.setText("Remind");
-            task_adapter.notifyDataSetChanged();
         }
     }
 
-    public void cancelAlarm() {
+    public void cancelAlarm(int t_id) {
         Intent intent = new Intent(this, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, theTask.getT_id(), intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, t_id, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
 

@@ -45,6 +45,16 @@ public class TheRepository {
     public void deleteTask(Tasks task){
         new DeleteTasksAsyncTask(tasksDao).execute(task);
     }
+    public Tasks getTask(Integer t_id){
+        try {
+            return new GetTaskAsyncTask(tasksDao).execute(t_id).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return new Tasks("Wrong Result", true, null);
+    }
     public LiveData<List<Tasks>> getAllTasks(){
         return allTasks;
     }
@@ -135,8 +145,6 @@ public class TheRepository {
             return null;
         }
     }
-
-
     private static class GetNoteAsyncTask extends AsyncTask<Integer,Void,Notes>{
         private NotesDao notesDao;
 
@@ -155,6 +163,27 @@ public class TheRepository {
             super.onPostExecute(notes);
         }
     }
+
+
+    private static class GetTaskAsyncTask extends AsyncTask<Integer,Void,Tasks>{
+        private TasksDao tasksDao;
+
+        public GetTaskAsyncTask(TasksDao tasksDao) {
+            this.tasksDao = tasksDao;
+        }
+
+        @Override
+        protected Tasks doInBackground(Integer... t_id) {
+            Tasks task= tasksDao.getTask(t_id[0]);
+            return task;
+        }
+
+        @Override
+        protected void onPostExecute(Tasks tasks) {
+            super.onPostExecute(tasks);
+        }
+    }
+
     private static class InsertNotesAsyncTask extends AsyncTask<Notes,Void,Void>{
         private NotesDao notesDao;
 

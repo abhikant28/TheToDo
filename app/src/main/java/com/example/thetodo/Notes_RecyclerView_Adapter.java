@@ -7,18 +7,29 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.thetodo.AppObjects.Notes;
-import com.example.thetodo.DataBase.TheViewModel;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Notes_RecyclerView_Adapter extends RecyclerView.Adapter<Notes_RecyclerView_Adapter.MyViewHolder> {
-    private List<Notes> notes = new ArrayList<>();
+public class Notes_RecyclerView_Adapter extends ListAdapter<Notes,Notes_RecyclerView_Adapter.MyViewHolder> {
     private OnItemClickListener listener;
+    private  static final DiffUtil.ItemCallback<Notes> DIFF_CALLBACK_NOTES = new DiffUtil.ItemCallback<Notes>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Notes oldItem, @NonNull Notes newItem) {
+            return oldItem.getN_id()==newItem.getN_id();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Notes oldItem, @NonNull Notes newItem) {
+            return oldItem.getBody().equals(newItem.getBody()) && oldItem.getTitle().equals(newItem.getTitle());
+        }
+    };
+
+    public Notes_RecyclerView_Adapter() {
+        super(DIFF_CALLBACK_NOTES);
+    }
 
     @NonNull
     @Override
@@ -29,9 +40,9 @@ public class Notes_RecyclerView_Adapter extends RecyclerView.Adapter<Notes_Recyc
 
     @Override
     public void onBindViewHolder(@NonNull Notes_RecyclerView_Adapter.MyViewHolder holder, int position) {
-        String title = notes.get(position).getTitle();
-        String about = notes.get(position).getBody();
-        String date = notes.get(position).getDate();
+        String title = getItem(position).getTitle();
+        String about = getItem(position).getBody();
+        String date = getItem(position).getDate();
 
         if (title.length()== 0) {
             holder.tv_title.setText(about);
@@ -44,12 +55,7 @@ public class Notes_RecyclerView_Adapter extends RecyclerView.Adapter<Notes_Recyc
         holder.tv_date.setText(date);
     }
 
-    @Override
-    public int getItemCount() {
-        return notes.size();
-    }
-
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+      public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView tv_title;
         private TextView tv_full;
         private TextView tv_date;
@@ -66,16 +72,11 @@ public class Notes_RecyclerView_Adapter extends RecyclerView.Adapter<Notes_Recyc
                 @Override
                 public void onClick(View view) {
                     if (listener != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
-                        listener.OnItemClick(notes.get(getAdapterPosition()));
+                        listener.OnItemClick(getItem(getAdapterPosition()));
                     }
                 }
             });
         }
-    }
-
-    public void setNotes(List<Notes> notes) {
-        this.notes = notes;
-        notifyDataSetChanged();
     }
 
     public interface OnItemClickListener {
