@@ -2,10 +2,14 @@ package com.example.thetodo.AppObjects;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import com.example.thetodo.Daos.DataConverter;
 
 import java.util.Calendar;
 
 @Entity(tableName = "tasks_table")
+@TypeConverters(DataConverter.class)
 public class Tasks {
 
     @PrimaryKey(autoGenerate = true)

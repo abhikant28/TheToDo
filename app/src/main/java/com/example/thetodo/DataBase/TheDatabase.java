@@ -7,11 +7,13 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverter;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.thetodo.AppObjects.Groups;
 import com.example.thetodo.AppObjects.Notes;
 import com.example.thetodo.AppObjects.Tasks;
+import com.example.thetodo.Daos.DataConverter;
 import com.example.thetodo.Daos.GroupsDao;
 import com.example.thetodo.Daos.NotesDao;
 import com.example.thetodo.Daos.TasksDao;
@@ -53,11 +55,8 @@ public abstract class TheDatabase extends RoomDatabase {
         }
         @Override
         protected Void doInBackground(Void... voids) {
-            groupsDao.insert(new Groups("First Group","1 Aug,2021"));
-            groupsDao.insert(new Groups("Second Group","2 Aug,2022"));
-            groupsDao.insert(new Groups("Third Group","4 Aug,2023"));
-            groupsDao.insert(new Groups("Fourth Group","5 Aug,2024"));
-            groupsDao.insert(new Groups("Fifth Group","6 Aug,2025"));
+            groupsDao.insert(new Groups("This is a Group"));
+
 
             taskDao.insert(new Tasks("1st Task", false, "Daily"));
             taskDao.insert(new Tasks("2nd Task", false, "Weekly"));

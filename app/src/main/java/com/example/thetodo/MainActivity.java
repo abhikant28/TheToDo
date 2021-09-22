@@ -192,39 +192,25 @@ public class MainActivity extends AppCompatActivity {
     private TextWatcher checkText = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
         }
 
         @Override
         public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
             if (charSequence.length() > 0) {
+                theTask.setTitle(charSequence.toString());
                 b_add_task.setClickable(true);
                 tv_task_remind.setClickable(true);
                 tv_task_repeat.setClickable(true);
-                b_add_task.setBackgroundColor(Color.parseColor("#FF6DC530"));
             } else {
                 theTask = null;
                 b_add_task.setClickable(false);
                 tv_task_remind.setClickable(false);
                 tv_task_repeat.setClickable(false);
-                b_add_task.setBackgroundColor(Color.parseColor("#817E7E"));
             }
         }
 
         @Override
         public void afterTextChanged(Editable editable) {
-            if (editable.toString().length() > 0) {
-                b_add_task.setClickable(true);
-                tv_task_remind.setClickable(true);
-                tv_task_repeat.setClickable(true);
-                b_add_task.setBackgroundColor(Color.parseColor("#FF6DC530"));
-            } else {
-                theTask=new Tasks("", false, "Once");
-                b_add_task.setClickable(false);
-                tv_task_remind.setClickable(false);
-                tv_task_repeat.setClickable(false);
-                b_add_task.setBackgroundColor(Color.parseColor("#817E7E"));
-            }
         }
     };
 
@@ -270,8 +256,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void addTask(View view) {
         if (!ev_task_tapToAdd.getText().toString().isEmpty()) {
-            theTask.getType();
-            viewModel.insert(theTask);
 
             if(setReminder){
                 Intent intent = new Intent(this, AlertReceiver.class);
@@ -283,12 +267,18 @@ public class MainActivity extends AppCompatActivity {
                     calen.add(Calendar.DATE, 1);
                 }
                 theTask.setDate(calen);
+                viewModel.insert(theTask);
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, calen.getTimeInMillis(), pendingIntent);
                 setReminder=false;
+            }else{
+                viewModel.insert(theTask);
             }
-            theTask=new Tasks("", false, "Once");
+            theTask=new Tasks("", false, "");
             ev_task_tapToAdd.setText("");
             tv_task_remind.setText("Remind");
+            tv_task_repeat.setText("Repeat");
+        }else{
+            Toast.makeText(this, "Type task to add", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -297,6 +287,5 @@ public class MainActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, t_id, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
-
     }
 }

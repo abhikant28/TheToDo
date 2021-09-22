@@ -20,7 +20,8 @@
             <Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:title="My Notes" />
+                android:titleTextColor="@color/white"
+                android:title="To Note" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,9 +44,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:background="@drawable/ic_baseline_add_24"
-                            android:backgroundTint="@color/black"
                             android:clickable="false"
-                            android:onClick="addTask" />
+                            android:onClick="addTask"/>
 
                         <EditText
                             android:id="@+id/Main_Task_TapToAdd"

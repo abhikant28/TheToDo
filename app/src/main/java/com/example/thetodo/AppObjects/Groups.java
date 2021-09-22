@@ -4,6 +4,8 @@ package com.example.thetodo.AppObjects;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Date;
+
 @Entity(tableName = "notesGroups_table")
 public class Groups {
 
@@ -12,9 +14,10 @@ public class Groups {
     private String title,date;
     private boolean show =false;
 
-    public Groups(String title, String date) {
+    public Groups(String title) {
         this.title = title;
-        this.date = date;
+        Date getDate=java.util.Calendar.getInstance().getTime();
+        this.date=String.valueOf(getDate).substring(0, 10);
     }
 
     public int getG_id() {

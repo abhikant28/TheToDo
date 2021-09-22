@@ -42,7 +42,7 @@ public class NewGroup_Dialog extends AppCompatDialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (!ev_group_name.getText().toString().isEmpty()) {
                             Log.i("GROUP::::", "Created....");
-                            viewModel.insert(new Groups(ev_group_name.getText().toString(), "Date"));
+                            viewModel.insert(new Groups(ev_group_name.getText().toString()));
                         }
                     }
                 });
