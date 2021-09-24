@@ -22,7 +22,7 @@
                 android:orientation="vertical"
                 android:layout_weight="1">
             <TextView
-                android:id="@+id/Main_RecyclerView_List_Item_Title"
+                android:id="@+id/Main_TextView_List_Item_Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Title"

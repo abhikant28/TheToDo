@@ -36,6 +36,7 @@ public abstract class TheDatabase extends RoomDatabase {
         }
         return instance;
     }
+
     private static RoomDatabase.Callback roomCallBack = new RoomDatabase.Callback(){
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
@@ -43,6 +44,7 @@ public abstract class TheDatabase extends RoomDatabase {
             new PopulateDbAsyncTask(instance).execute();
         }
     };
+
     private  static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void>{
         private NotesDao notesDao;
         private GroupsDao groupsDao;
@@ -55,24 +57,19 @@ public abstract class TheDatabase extends RoomDatabase {
         }
         @Override
         protected Void doInBackground(Void... voids) {
-            groupsDao.insert(new Groups("This is a Group"));
+            groupsDao.insert(new Groups("Notes Group"));
 
 
-            taskDao.insert(new Tasks("1st Task", false, "Daily"));
-            taskDao.insert(new Tasks("2nd Task", false, "Weekly"));
-            taskDao.insert(new Tasks("3rd Task", true, "Daily"));
-            taskDao.insert(new Tasks("4th Task", true, "Annual"));
-//            taskDao.insert(new Tasks("5th Task", false, "Annual"));
-//            taskDao.insert(new Tasks("6th Task", true, "Annual"));
-//            taskDao.insert(new Tasks("7th Task", false, "Annual"));
-//            taskDao.insert(new Tasks("8th Task", false, "Annual"));
+            taskDao.insert(new Tasks("Your to do list", false, "Daily"));
+            taskDao.insert(new Tasks("You can set reminders", false, "Weekly"));
+            taskDao.insert(new Tasks("When Completed", true, "Daily"));
+            taskDao.insert(new Tasks("Swipe to delete tasks once completed", true, "Annual"));
 
-            notesDao.insert(new Notes("Note 1", "DescriptionABC",0));
-            notesDao.insert(new Notes("Note 2", "DescriptionDBC",0));
-            notesDao.insert(new Notes("Note 3", "DescriptionEBC",0));
-            notesDao.insert(new Notes("Note 4", "DescriptionFBC",0));
-            notesDao.insert(new Notes("Note 5", "DescriptionGBC",0));
+            notesDao.insert(new Notes("Note", "Description",0));
+            notesDao.insert(new Notes("Tap to open Note", "Tap on New note below to make a new note",0));
+
             return null;
         }
     }
+
 }

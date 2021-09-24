@@ -43,7 +43,7 @@
                             android:layout_width="50dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:background="@drawable/ic_baseline_add_24"
+                            android:background="@drawable/add_button_task"
                             android:clickable="false"
                             android:onClick="addTask"/>
 
@@ -116,7 +116,6 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/Main_Super_RecyclerView_List_Item_GroupName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_baseline_keyboard_arrow_down_24"
@@ -128,8 +127,8 @@
                 android:layout_height="wrap_content"
                 tools:listitem="@layout/main_super_list_item_note" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/Main_Notes_Super_RecyclerView"
+            <ExpandableListView
+                android:id="@+id/Main_Notes_Super_GroupedNotes_RecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:listitem="@layout/main_recycler_super_list_item_group" />

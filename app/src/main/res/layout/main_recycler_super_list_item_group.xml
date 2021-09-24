@@ -12,7 +12,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/Main_Super_RecyclerView_List_Item_GroupName"
+            android:id="@+id/Main_Super_TextView_List_Item_GroupName"
             android:layout_width="0dp"
             android:padding="15dp"
             android:layout_height="wrap_content"
@@ -27,11 +27,11 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/Main_Super_RecyclerView_List_Item_List"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:listitem="@layout/main_super_list_item_note" />
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/Main_Super_RecyclerView_List_Item_List"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        tools:listitem="@layout/main_super_list_item_note" />-->
 
     <TextView
         android:id="@+id/Main_Super_RecyclerView_List_Item_TapToAdd"

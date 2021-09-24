@@ -30,6 +30,14 @@
         </activity>
 
         <receiver android:name=".AlertReceiver" />
+        <receiver
+            android:exported="true"
+            android:name="com.example.thetodo.BootBroadcastReceiver"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

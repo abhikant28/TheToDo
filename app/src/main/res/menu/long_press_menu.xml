@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <item android:id="@+id/Repeat_Option_once" android:title="Never"/>
+        <item android:id="@+id/Repeat_Option_daily" android:title="Every Day"/>
+        <item android:id="@+id/Repeat_Option_weekly" android:title="Every Week"/>
+        <item android:id="@+id/Repeat_Option_monthly" android:title="Every Month"/>
+        <item android:id="@+id/Repeat_Option_yearly" android:title="Every Year"/>
+
+</menu>

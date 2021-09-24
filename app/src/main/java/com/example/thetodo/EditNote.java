@@ -60,11 +60,18 @@ public class EditNote extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    public void finish() {
+        super.finish();
         if (ev_title.getText().toString().isEmpty() && ev_desc.getText().toString().isEmpty()) {
         } else {
             save();
         }
+        overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+    }
+
+    @Override
+    public void onBackPressed() {
+
         super.onBackPressed();
     }
 

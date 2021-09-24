@@ -65,7 +65,7 @@ public class Notes_RecyclerView_Adapter extends ListAdapter<Notes,Notes_Recycler
             super(itemView);
             ll_main = itemView.findViewById(R.id.Main_RecyclerView_List_Item_LinearLayout1);
             tv_date = itemView.findViewById(R.id.Main_RecyclerView_List_Item_Time);
-            tv_title = itemView.findViewById(R.id.Main_RecyclerView_List_Item_Title);
+            tv_title = itemView.findViewById(R.id.Main_TextView_List_Item_Title);
             tv_full = itemView.findViewById(R.id.Main_RecyclerView_List_Item_Sub);
 
             ll_main.setOnClickListener(new View.OnClickListener() {
