@@ -8,11 +8,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Create new Group"
-        android:gravity="center"/>
+
 <EditText
     android:id="@+id/Main_Group_Dialog_EditText_NewGroup"
     android:layout_margin="10dp"

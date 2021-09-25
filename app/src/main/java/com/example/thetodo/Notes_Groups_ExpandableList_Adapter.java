@@ -97,11 +97,13 @@ public class Notes_Groups_ExpandableList_Adapter extends BaseExpandableListAdapt
             LayoutInflater inflater = (LayoutInflater) cxt.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.main_super_list_item_note, null);
         }
+
         TextView tv_date = view.findViewById(R.id.Main_RecyclerView_List_Item_Time);
         TextView tv_title = view.findViewById(R.id.Main_TextView_List_Item_Title);
         TextView tv_desc= view.findViewById(R.id.Main_RecyclerView_List_Item_Sub);
+
         Notes note = getChild(groupPosition, childPosition);
-        Log.i("NOTE:::",note.getTitle());
+
         tv_title.setText(note.getTitle());
         tv_date.setText(note.getDate());
         tv_desc.setText(note.getBody());
