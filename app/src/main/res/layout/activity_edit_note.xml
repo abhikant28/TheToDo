@@ -12,14 +12,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<!--    <Toolbar-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"/>-->
+    <Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <EditText
         android:id="@+id/NotesEditor_EditTextView_Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textCapSentences"
+        android:textSize="25dp"
         android:padding="15dp"
         android:hint="Title"/>
 
@@ -27,6 +29,7 @@
         android:id="@+id/NotesEditor_EditTextView_all"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textCapSentences"
         android:gravity="start"
         android:hint="Type away...."
         android:layout_weight="1"/>
@@ -35,7 +38,8 @@
         android:src="@mipmap/ic_launcher"
         android:id="@+id/NotesEditor_ImageView_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="0dp"
+        android:visibility="invisible"/>
 
 </LinearLayout>
 </LinearLayout>

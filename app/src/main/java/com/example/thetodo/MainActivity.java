@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         tv_task_remind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!ev_task_tapToAdd.getText().toString().isEmpty()) {
+                if (!ev_task_tapToAdd.getText().toString().trim().isEmpty()) {
                     calen = setTaskTimeDate();
                 }
             }
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         tv_task_repeat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!ev_task_tapToAdd.getText().toString().isEmpty()){
+                if(!ev_task_tapToAdd.getText().toString().trim().isEmpty()){
                     repeatPopup();
                 }
             }
@@ -150,12 +150,17 @@ public class MainActivity extends AppCompatActivity {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 Tasks task = task_adapter.getTask(viewHolder.getAdapterPosition());
                 if (task.isCompleted()) {
-                    cancelAlarm(task.getT_id());
-                    viewModel.delete(task);
+                    if(task.getDate()==null || task.getType().equals(REPEAT_TYPE_ONCE)){
+                        viewModel.delete(task);
+                    }else{
+                        task.setShow(false);
+                        viewModel.update(task);
+                    }
                     Toast.makeText(MainActivity.this, "Task removed", Toast.LENGTH_SHORT).show();
                 } else {
                     task_adapter.notifyDataSetChanged();
                     Toast.makeText(MainActivity.this, "Complete Task to remove", Toast.LENGTH_SHORT).show();
+                    task_adapter.notifyDataSetChanged();
                 }
             }
         }).attachToRecyclerView(task_RecyclerView);
@@ -239,13 +244,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-            if (charSequence.length() > 0) {
+            if (charSequence.toString().trim().length() > 0) {
                 theTask.setTitle(charSequence.toString());
                 b_add_task.setEnabled(true);
                 tv_task_remind.setClickable(true);
                 tv_task_repeat.setClickable(true);
             } else {
-                theTask = null;
+                theTask=new Tasks("", false, "");
                 b_add_task.setEnabled(false);
                 tv_task_remind.setClickable(false);
                 tv_task_repeat.setClickable(false);
@@ -269,6 +274,12 @@ public class MainActivity extends AppCompatActivity {
         task_RecyclerView.setLayoutManager(layoutManager);
         task_RecyclerView.setItemAnimator(new DefaultItemAnimator());
         task_RecyclerView.setAdapter(task_adapter);
+        task_RecyclerView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                return false;
+            }
+        });
     }
 
     private void setAllNotesAdapter() {
@@ -290,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addTask(View view) {
-        if (!ev_task_tapToAdd.getText().toString().isEmpty()) {
+        if (!ev_task_tapToAdd.getText().toString().trim().isEmpty()) {
 
             if(setReminder){
                 Intent intent = new Intent(this, AlertReceiver.class);

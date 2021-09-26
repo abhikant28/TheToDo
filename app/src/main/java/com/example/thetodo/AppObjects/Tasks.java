@@ -18,6 +18,7 @@ public class Tasks {
     private boolean completed;
     private String type;
     private Calendar date;
+    private boolean show=true;
 
     public Tasks(String title, boolean completed, String type) {
         this.title = title;
@@ -28,6 +29,14 @@ public class Tasks {
 
     public Calendar getDate() {
         return date;
+    }
+
+    public boolean isShow() {
+        return show;
+    }
+
+    public void setShow(boolean show) {
+        this.show = show;
     }
 
     public void setDate(Calendar date) {

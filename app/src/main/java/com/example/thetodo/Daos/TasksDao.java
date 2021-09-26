@@ -27,7 +27,7 @@ public interface TasksDao {
     @Query("SELECT * FROM tasks_table WHERE t_id= :t_id LIMIT 1")
     Tasks getTask(int t_id);
 
-    @Query("SELECT * FROM tasks_table ORDER BY completed ASC")
+    @Query("SELECT * FROM tasks_table WHERE show is 1 ORDER BY completed ASC")
     LiveData<List<Tasks>> getAllTasks();
 
 }

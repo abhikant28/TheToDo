@@ -65,7 +65,7 @@ public class Notes_Groups_ExpandableList_Adapter extends BaseExpandableListAdapt
 
     @Override
     public boolean hasStableIds() {
-        return false;
+        return true;
     }
 
     @Override
@@ -118,7 +118,7 @@ public class Notes_Groups_ExpandableList_Adapter extends BaseExpandableListAdapt
 
     @Override
     public boolean areAllItemsEnabled() {
-        return true;
+        return false;
     }
 
     @Override

@@ -35,8 +35,9 @@ public class AlertReceiver extends BroadcastReceiver {
     }
 
 
-    public void setNext(int t_id) {
+    public void setNextAlert(int t_id) {
         Tasks task = viewModel.getTask(t_id);
+        task.setShow(true);
         Calendar date = task.getDate();
         switch (task.getType()) {
             case "monthly":

@@ -1,17 +1,25 @@
 package com.example.thetodo;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.thetodo.AppObjects.Notes;
+import com.example.thetodo.AppObjects.Tasks;
+import com.example.thetodo.dialogBoxes.Notes_Delete_Dialog;
+import com.example.thetodo.dialogBoxes.Tasks_Delete_Dialog;
 
 public class Notes_RecyclerView_Adapter extends ListAdapter<Notes,Notes_RecyclerView_Adapter.MyViewHolder> {
     private OnItemClickListener listener;
@@ -68,6 +76,14 @@ public class Notes_RecyclerView_Adapter extends ListAdapter<Notes,Notes_Recycler
             tv_title = itemView.findViewById(R.id.Main_TextView_List_Item_Title);
             tv_full = itemView.findViewById(R.id.Main_RecyclerView_List_Item_Sub);
 
+            ll_main.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    Log.i("LONG:::","CLICKED");
+                    showPopup(view, getAdapterPosition());
+                    return true;
+                }
+            });
             ll_main.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -86,4 +102,29 @@ public class Notes_RecyclerView_Adapter extends ListAdapter<Notes,Notes_Recycler
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
+
+    public void showPopup(View v, int pos){
+        PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
+        popupMenu.inflate(R.menu.long_press_menu_notes);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.Notes_Option_Delete:
+                        deleteDialogBox(getItem(pos),v.getContext());
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+        });
+        popupMenu.show();
+    }
+    private void deleteDialogBox(Notes note, Context cxt) {
+        Notes_Delete_Dialog deleteDialog = new Notes_Delete_Dialog(note);
+        deleteDialog.show(((FragmentActivity)cxt).getSupportFragmentManager(), "Delete Note");
+    }
+
+
 }

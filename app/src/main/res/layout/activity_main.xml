@@ -1,145 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0277BD"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/e4c1819baf923f0c5b7f1435b86f3191"
     android:paddingHorizontal="5dp"
+    android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:title="To Note"
+            android:titleTextColor="#0277BD"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <Toolbar
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:titleTextColor="@color/white"
-                android:title="To Note" />
+                app:cardCornerRadius="10dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <androidx.cardview.widget.CardView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="10dp">
+                    android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <Button
+                        android:id="@+id/Main_Task_ImageButton_AddButton"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_gravity="center"
+                        android:background="@drawable/add_button_task"
+                        android:enabled="false"
+                        android:onClick="addTask" />
 
-                        <Button
-                            android:id="@+id/Main_Task_ImageButton_AddButton"
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:background="@drawable/add_button_task"
-                            android:clickable="false"
-                            android:onClick="addTask"/>
+                    <EditText
+                        android:id="@+id/Main_Task_TapToAdd"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapSentences"                android:layout_weight="1"
+                        android:hint="Tap to add Task" />
 
-                        <EditText
-                            android:id="@+id/Main_Task_TapToAdd"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:hint="Tap to add Task" />
+                    <TextView
+                        android:id="@+id/Main_Task_TextView_Remind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:paddingHorizontal="5dp"
+                        android:text="Remind" />
 
-                        <TextView
-                            android:id="@+id/Main_Task_TextView_Remind"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:paddingHorizontal="5dp"
-                            android:text="Remind" />
-
-                        <TextView
-                            android:id="@+id/Main_Task_TextView_Repeat"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:paddingHorizontal="5dp"
-                            android:text="Repeat" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_baseline_keyboard_arrow_down_24"
-                    android:padding="5dp"
-                    android:text="Today" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/Main_Super_Task_RecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:listitem="@layout/main_task_list_item" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/Main_Notes_TextView_NewNote"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/round_back"
-                    android:gravity="center"
-                    android:padding="15dp"
-                    android:text="+ New Note"
-                    android:textSize="18dp" />
-
-                <TextView
-                    android:id="@+id/Main_Notes_TextView_NewNoteGroup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:background="@drawable/round_back"
-                    android:gravity="center"
-                    android:padding="15dp"
-                    android:text="+ New Group"
-                    android:textSize="18dp" />
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/Main_Task_TextView_Repeat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:paddingHorizontal="5dp"
+                        android:text="Repeat" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_baseline_keyboard_arrow_down_24"
-                android:text="All notes" />
+                android:padding="5dp"
+                android:text="Today" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/Main_Super_RecyclerView_AllNotes_List"
+                android:id="@+id/Main_Super_Task_RecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/main_super_list_item_note" />
-
-            <ExpandableListView
-                android:id="@+id/Main_Notes_Super_GroupedNotes_RecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/main_recycler_super_list_item_group" />
+                tools:listitem="@layout/main_task_list_item" />
         </LinearLayout>
-    </ScrollView>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Developed by Abhikant Awasthi. © All rights reserved."
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/Main_Notes_TextView_NewNote"
+                android:layout_width="wrap_content"
+                android:layout_height="58dp"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:background="@drawable/round_back"
+                android:backgroundTint="#97CEEF"
+                android:gravity="center"
+                android:padding="15dp"
+                android:text="+ New Note"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/Main_Notes_TextView_NewNoteGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:background="@drawable/round_back"
+                android:backgroundTint="#97CEEF"
+                android:gravity="center"
+                android:padding="15dp"
+                android:text="+ New Group"
+                android:textSize="18dp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#CED9DF"
+            android:layout_marginTop="8dp"
+            android:textSize="20dp"
+            android:drawableEnd="@drawable/ic_baseline_keyboard_arrow_down_24"
+            android:text="Notes" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Main_Super_RecyclerView_AllNotes_List"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/main_super_list_item_note" />
+
+        <ExpandableListView
+            android:id="@+id/Main_Notes_Super_GroupedNotes_RecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layoutDirection="rtl"
+            android:layout_weight="1"
+            tools:listitem="@layout/main_recycler_super_list_item_group" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Developed by Abhikant Awasthi. © All rights reserved." />
+    </LinearLayout>
+
+
+</ScrollView>

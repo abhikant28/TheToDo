@@ -49,6 +49,7 @@ public class EditNote extends AppCompatActivity {
 
         Intent extras = getIntent();
         if (extras.getBooleanExtra("isNew", true)) {
+
             g_id=extras.getIntExtra("g_id", 0);
         } else {
             n_id = extras.getIntExtra("note_id", 0);
@@ -62,7 +63,7 @@ public class EditNote extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
-        if (ev_title.getText().toString().isEmpty() && ev_desc.getText().toString().isEmpty()) {
+        if (ev_title.getText().toString().trim().isEmpty() && ev_desc.getText().toString().trim().isEmpty()) {
         } else {
             save();
         }
@@ -76,8 +77,8 @@ public class EditNote extends AppCompatActivity {
     }
 
     public void save() {
-        String title = ev_title.getText().toString();
-        String desc = ev_desc.getText().toString();
+        String title = ev_title.getText().toString().trim();
+        String desc = ev_desc.getText().toString().trim();
         if (isNew) {
             Notes note = new Notes(title.trim(), desc, 0);
             note.setG_id(g_id);

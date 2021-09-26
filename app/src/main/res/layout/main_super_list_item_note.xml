@@ -8,7 +8,8 @@
     android:background="@drawable/round_back"
     app:cardCornerRadius="5dp"
     android:padding="2dp"
-    android:paddingHorizontal="8dp">
+    android:paddingHorizontal="8dp"
+    android:layoutDirection="ltr">
 
         <LinearLayout
             android:id="@+id/Main_RecyclerView_List_Item_LinearLayout1"
@@ -26,6 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Title"
+                android:textSize="18dp"
                 android:lines="1"/>
                 <TextView
                     android:id="@+id/Main_RecyclerView_List_Item_Sub"
@@ -33,6 +35,7 @@
                     android:layout_height="wrap_content"
                     android:text="About"
                     android:ellipsize="end"
+                    android:textSize="18dp"
                     android:lines="1"
                     android:layout_weight="1"/>
 
@@ -42,6 +45,7 @@
                 android:id="@+id/Main_RecyclerView_List_Item_Time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="18dp"
                 android:text="When" />
 
     </LinearLayout>
