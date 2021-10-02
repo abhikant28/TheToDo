@@ -5,10 +5,10 @@
         android:title="Select Group"
         app:showAsAction="always">
 <menu>
-    <item android:id="NoteEdit_MenuOption_New"
-        android:title="+ Create New Group"/>
-    <item android:id="NoteEdit_MenuOption_G"
-        android:title="Group"/>
+<!--    <item android:id="NoteEdit_MenuOption_New"-->
+<!--        android:title="+ Create New Group"/>-->
+<!--    <item android:id="NoteEdit_MenuOption_G"-->
+<!--        android:title="Group"/>-->
 </menu>
     </item>
 
