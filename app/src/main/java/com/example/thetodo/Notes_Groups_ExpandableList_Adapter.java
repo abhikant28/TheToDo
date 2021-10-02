@@ -14,6 +14,8 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.thetodo.AppObjects.Groups;
 import com.example.thetodo.AppObjects.Notes;
 
@@ -35,7 +37,7 @@ public class Notes_Groups_ExpandableList_Adapter extends BaseExpandableListAdapt
 
     @Override
     public int getGroupCount() {
-        return groupMap.size();
+        return groupsList.size();
     }
 
     @Override
@@ -45,7 +47,7 @@ public class Notes_Groups_ExpandableList_Adapter extends BaseExpandableListAdapt
 
     @Override
     public Object getGroup(int i) {
-        return groupMap.get(i);
+        return groupsList.get(i);
     }
 
     @Override
@@ -65,15 +67,15 @@ public class Notes_Groups_ExpandableList_Adapter extends BaseExpandableListAdapt
 
     @Override
     public boolean hasStableIds() {
-        return true;
+        return false;
     }
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View view, ViewGroup viewGroup) {
-        if (view == null) {
+
             LayoutInflater inflater = (LayoutInflater) cxt.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.main_recycler_super_list_item_group, null);
-        }
+
         TextView tv_grpName = view.findViewById(R.id.Main_Super_TextView_List_Item_GroupName);
         tv_grpName.setText(groupsList.get(groupPosition).getTitle());
         TextView tv_tapToAddNote = view.findViewById(R.id.Main_Super_RecyclerView_List_Item_TapToAdd);
@@ -93,16 +95,15 @@ public class Notes_Groups_ExpandableList_Adapter extends BaseExpandableListAdapt
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View view, ViewGroup viewGroup) {
-        if (view == null) {
+        Notes note = getChild(groupPosition, childPosition);
+
             LayoutInflater inflater = (LayoutInflater) cxt.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.main_super_list_item_note, null);
-        }
+            view = inflater.inflate(R.layout.main_super_list_item_note, viewGroup,false);
+
 
         TextView tv_date = view.findViewById(R.id.Main_RecyclerView_List_Item_Time);
         TextView tv_title = view.findViewById(R.id.Main_TextView_List_Item_Title);
         TextView tv_desc= view.findViewById(R.id.Main_RecyclerView_List_Item_Sub);
-
-        Notes note = getChild(groupPosition, childPosition);
 
         tv_title.setText(note.getTitle());
         tv_date.setText(note.getDate());
@@ -154,6 +155,7 @@ public class Notes_Groups_ExpandableList_Adapter extends BaseExpandableListAdapt
         }
         for (Groups i : groups) {
             List gNote= viewModel.getGroupNotes(i.getG_id());
+
             groupMap.put(i.getG_id(), gNote);
         }
         Log.i("NEW LIST:::::",groupMap.toString());

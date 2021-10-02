@@ -8,6 +8,8 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,6 +17,7 @@ import android.widget.MediaController;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.thetodo.AppObjects.Notes;
@@ -34,12 +37,18 @@ public class EditNote extends AppCompatActivity {
     final int IMAGE_EDITOR_INTENT=50;
     private Bitmap bmpImg;
     private ImageView iv_image;
+    private Toolbar toolbar;
+    private Toolbar toolbarr;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_note);
+
+        toolbar=findViewById(R.id.EditNote_Toolbar1);
+        toolbarr= findViewById(R.id.EditNote_Toolbar2);
+        setSupportActionBar(toolbar);
 
         viewModel = ViewModelProviders.of(this).get(TheViewModel.class);
 
@@ -59,7 +68,16 @@ public class EditNote extends AppCompatActivity {
             isNew = false;
         }
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
 
+        if(getIntent().getBooleanExtra("isNew", true)){
+            inflater.inflate(R.menu.menu_group_select, menu);
+        }
+        inflater.inflate(R.menu.menu_editnote_typeselect, menu);
+        return true;
+    }
     @Override
     public void finish() {
         super.finish();

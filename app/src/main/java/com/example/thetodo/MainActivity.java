@@ -6,13 +6,11 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -74,6 +72,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        task_RecyclerView = findViewById(R.id.Main_Super_Task_RecyclerView);
+        notes_group_View = findViewById(R.id.Main_Notes_Super_GroupedNotes_RecyclerView);
+        notes_all_RecyclerView = findViewById(R.id.Main_Super_RecyclerView_AllNotes_List);
+        ev_task_tapToAdd = findViewById(R.id.Main_Task_TapToAdd);
+        b_add_task = findViewById(R.id.Main_Task_ImageButton_AddButton);
+        tv_task_remind = findViewById(R.id.Main_Task_TextView_Remind);
+        tv_task_repeat = findViewById(R.id.Main_Task_TextView_Repeat);
+        tv_notes_newGroup = findViewById(R.id.Main_Notes_TextView_NewNoteGroup);
+        tv_notes_newNote = findViewById(R.id.Main_Notes_TextView_NewNote);
+
         viewModel = ViewModelProviders.of(this).get(TheViewModel.class);
         viewModel.getAllNotes().observe(this, new Observer<List<Notes>>() {
             @Override
@@ -87,23 +95,12 @@ public class MainActivity extends AppCompatActivity {
                 task_adapter.submitList(tasks);
             }
         });
-
         viewModel.getAllGroups().observe(this, new Observer<List<Groups>>() {
             @Override
             public void onChanged(List<Groups> groups) {
                 notes_groups_adapter.setList(groups);
             }
         });
-
-        task_RecyclerView = findViewById(R.id.Main_Super_Task_RecyclerView);
-        notes_group_View = findViewById(R.id.Main_Notes_Super_GroupedNotes_RecyclerView);
-        notes_all_RecyclerView = findViewById(R.id.Main_Super_RecyclerView_AllNotes_List);
-        ev_task_tapToAdd = findViewById(R.id.Main_Task_TapToAdd);
-        b_add_task = findViewById(R.id.Main_Task_ImageButton_AddButton);
-        tv_task_remind = findViewById(R.id.Main_Task_TextView_Remind);
-        tv_task_repeat = findViewById(R.id.Main_Task_TextView_Repeat);
-        tv_notes_newGroup = findViewById(R.id.Main_Notes_TextView_NewNoteGroup);
-        tv_notes_newNote = findViewById(R.id.Main_Notes_TextView_NewNote);
 
         setTaskAdapter();
         setAllNotesAdapter();
@@ -119,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ev_task_tapToAdd.addTextChangedListener(checkText);
+
         tv_notes_newNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

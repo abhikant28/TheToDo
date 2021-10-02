@@ -25,7 +25,10 @@
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_task_repeat_dialog.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/menu/long_press_menu.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/menu/long_press_menu_Notes.xml" value="0.25" />
+        <entry key="..\:/Work/TheToDo/app/src/main/res/menu/long_press_menu_notes.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/menu/long_press_menu_task.xml" value="0.25" />
+        <entry key="..\:/Work/TheToDo/app/src/main/res/menu/menu_editnote_typeselect.xml" value="0.25" />
+        <entry key="..\:/Work/TheToDo/app/src/main/res/menu/menu_group_select.xml" value="0.25" />
       </map>
     </option>
   </component>
