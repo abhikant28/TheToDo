@@ -16,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     public static String REPEAT_TYPE_WEEKLY="Weekly";
     public static String REPEAT_TYPE_MONTHLY="Monthly";
     public static String REPEAT_TYPE_YEARLY="Yearly";
+    public static RelativeLayout MAIN_ACTIVITY_LAYOUT;
 
     private RecyclerView task_RecyclerView;
     public final Task_RecyclerView_Adapter task_adapter = new Task_RecyclerView_Adapter();
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MAIN_ACTIVITY_LAYOUT= findViewById(R.id.MAIN_RELATIVELAYOUT);
         task_RecyclerView = findViewById(R.id.Main_Super_Task_RecyclerView);
         notes_group_View = findViewById(R.id.Main_Notes_Super_GroupedNotes_RecyclerView);
         notes_all_RecyclerView = findViewById(R.id.Main_Super_RecyclerView_AllNotes_List);
@@ -83,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         tv_notes_newNote = findViewById(R.id.Main_Notes_TextView_NewNote);
 
         viewModel = ViewModelProviders.of(this).get(TheViewModel.class);
+
         viewModel.getAllNotes().observe(this, new Observer<List<Notes>>() {
             @Override
             public void onChanged(List<Notes> notes) {
@@ -257,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
+
         }
     };
 

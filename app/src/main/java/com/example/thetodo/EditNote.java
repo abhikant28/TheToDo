@@ -1,7 +1,9 @@
 package com.example.thetodo;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -18,6 +20,8 @@ import android.widget.MediaController;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.thetodo.AppObjects.Notes;
@@ -38,7 +42,6 @@ public class EditNote extends AppCompatActivity {
     private Bitmap bmpImg;
     private ImageView iv_image;
     private Toolbar toolbar;
-    private Toolbar toolbarr;
 
 
     @Override
@@ -47,8 +50,9 @@ public class EditNote extends AppCompatActivity {
         setContentView(R.layout.activity_edit_note);
 
         toolbar=findViewById(R.id.EditNote_Toolbar1);
-        toolbarr= findViewById(R.id.EditNote_Toolbar2);
         setSupportActionBar(toolbar);
+        toolbar.setTitle("");
+
 
         viewModel = ViewModelProviders.of(this).get(TheViewModel.class);
 
@@ -58,7 +62,6 @@ public class EditNote extends AppCompatActivity {
 
         Intent extras = getIntent();
         if (extras.getBooleanExtra("isNew", true)) {
-
             g_id=extras.getIntExtra("g_id", 0);
         } else {
             n_id = extras.getIntExtra("note_id", 0);
@@ -68,6 +71,7 @@ public class EditNote extends AppCompatActivity {
             isNew = false;
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -78,6 +82,7 @@ public class EditNote extends AppCompatActivity {
         inflater.inflate(R.menu.menu_editnote_typeselect, menu);
         return true;
     }
+
     @Override
     public void finish() {
         super.finish();
@@ -115,10 +120,14 @@ public class EditNote extends AppCompatActivity {
     }
 
     public void takePicture(){
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(intent.resolveActivity(getPackageManager())!=null){
-            Log.i("TAKePIC", "Triggered");
-            startActivityForResult(intent, CAMERA_INTENT);
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String []{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE}, 8);
+        }else{
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                Log.i("TAKePIC", "Triggered");
+                startActivityForResult(intent, CAMERA_INTENT);
+            }
         }
     }
 

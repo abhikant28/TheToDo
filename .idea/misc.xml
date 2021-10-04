@@ -10,9 +10,11 @@
         <entry key="..\:/Work/TheToDo/app/src/main/res/drawable/round_back.xml" value="0.26614583333333336" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/drawable/round_box.xml" value="0.26614583333333336" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/drawable/task_add_button_bg.xml" value="0.26614583333333336" />
+        <entry key="..\:/Work/TheToDo/app/src/main/res/layout/activity_background_picker.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/activity_edit_note.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/activity_image_editor.xml" value="0.24895833333333334" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Work/TheToDo/app/src/main/res/layout/activity_preferances.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_delete_note.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_delete_tasks.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_list_item.xml" value="0.25" />
@@ -23,6 +25,8 @@
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_super_list_item_note.xml" value="0.23754789272030652" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_task_list_item.xml" value="0.264" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_task_repeat_dialog.xml" value="0.25" />
+        <entry key="..\:/Work/TheToDo/app/src/main/res/layout/preferences_picker_bg.xml" value="0.1" />
+        <entry key="..\:/Work/TheToDo/app/src/main/res/menu/background_picker_options.xml" value="0.14114583333333333" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/menu/long_press_menu.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/menu/long_press_menu_Notes.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/menu/long_press_menu_notes.xml" value="0.25" />

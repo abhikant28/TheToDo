@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Prefereances.BackgroundPicker">
+
+    <ImageView
+        android:id="@+id/BackgroundPicker_Background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/teal_200" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/BackgroundPicker_Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:title="Choose a Background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_back"
+        android:elevation="10dp"
+        android:layoutDirection="ltr"
+        android:padding="2dp"
+        android:paddingHorizontal="8dp"
+        app:cardCornerRadius="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:text="Title"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="About"
+                    android:textSize="18dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="When"
+                android:textSize="18dp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="152dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp">
+
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/add_button_task"
+            android:enabled="false"/>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Tap to add Task"
+            android:inputType="textCapSentences" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:paddingHorizontal="5dp"
+            android:text="Remind" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:paddingHorizontal="5dp"
+            android:text="Repeat" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:scrollbars="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:id="@+id/BackgroundPicker_Color_LightYellow"
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="5dp"
+                android:background="#EFD75C"
+                android:onClick="colorSelected" />
+
+            <ImageView
+                android:id="@+id/BackgroundPicker_Color_Yellow"
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="5dp"
+                android:background="#F9DD25"
+                android:onClick="colorSelected" />
+
+            <ImageView
+                android:id="@+id/BackgroundPicker_Color_LightBlue"
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="5dp"
+                android:background="#44A7E3"
+                android:onClick="colorSelected" />
+
+            <ImageView
+                android:id="@+id/BackgroundPicker_Color_Blue"
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="5dp"
+                android:background="#1565C0"
+                android:onClick="colorSelected" />
+
+            <ImageView
+                android:id="@+id/BackgroundPicker_Color_Red"
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="5dp"
+                android:background="#C14646"
+                android:onClick="colorSelected" />
+
+            <ImageView
+                android:id="@+id/BackgroundPicker_Color_Teal"
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="5dp"
+                android:background="@color/teal_700"
+                android:onClick="colorSelected" />
+
+            <ImageView
+                android:id="@+id/BackgroundPicker_Color_Green"
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="5dp"
+                android:background="#2E7D32"
+                android:onClick="colorSelected" />
+
+            <ImageView
+                android:id="@+id/BackgroundPicker_Color_Purple"
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="5dp"
+                android:background="#6A1B9A"
+                android:onClick="colorSelected" />
+
+
+            <ImageView
+                android:id="@+id/BackgroundPicker_Color_LightGreen"
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="5dp"
+                android:background="#558B2F"
+                android:onClick="colorSelected" />
+
+            <ImageView
+                android:id="@+id/BackgroundPicker_ImagePick"
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/add_button_task"
+                android:onClick="pickImage" />
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
