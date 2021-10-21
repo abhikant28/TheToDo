@@ -1,5 +1,7 @@
 package com.example.thetodo.dialogBoxes;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.example.thetodo.MainActivity.SHARED_PREFS_NAME;
 import static com.example.thetodo.MainActivity.viewModel;
 
 import android.app.AlarmManager;
@@ -8,6 +10,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +23,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.thetodo.AlertReceiver;
 import com.example.thetodo.AppObjects.Notes;
+import com.example.thetodo.MainActivity;
 import com.example.thetodo.R;
 
 public class Notes_Delete_Dialog extends AppCompatDialogFragment {
@@ -53,6 +57,12 @@ public class Notes_Delete_Dialog extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         viewModel.delete(note);
+                        if(cb_never.isChecked()){
+                            SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
+                            SharedPreferences.Editor SPeditor = sharedPreferences.edit();
+                            SPeditor.putBoolean("NEVER_REMIND_NOTES_DELETE", true);
+                            SPeditor.apply();
+                        }
                     }
                 });
         return builder.create();

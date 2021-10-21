@@ -13,7 +13,7 @@
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/activity_background_picker.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/activity_edit_note.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/activity_image_editor.xml" value="0.24895833333333334" />
-        <entry key="..\:/Work/TheToDo/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Work/TheToDo/app/src/main/res/layout/activity_main.xml" value="0.19495213228894692" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/activity_preferances.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_delete_note.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_delete_tasks.xml" value="0.25" />
@@ -26,11 +26,12 @@
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_task_list_item.xml" value="0.264" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/main_task_repeat_dialog.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/layout/preferences_picker_bg.xml" value="0.1" />
-        <entry key="..\:/Work/TheToDo/app/src/main/res/menu/background_picker_options.xml" value="0.14114583333333333" />
+        <entry key="..\:/Work/TheToDo/app/src/main/res/menu/background_picker_options.xml" value="0.264" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/menu/long_press_menu.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/menu/long_press_menu_Notes.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/menu/long_press_menu_notes.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/menu/long_press_menu_task.xml" value="0.25" />
+        <entry key="..\:/Work/TheToDo/app/src/main/res/menu/main_menu.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/menu/menu_editnote_typeselect.xml" value="0.25" />
         <entry key="..\:/Work/TheToDo/app/src/main/res/menu/menu_group_select.xml" value="0.25" />
       </map>

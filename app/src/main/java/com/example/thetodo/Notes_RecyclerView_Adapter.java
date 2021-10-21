@@ -1,6 +1,11 @@
 package com.example.thetodo;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.example.thetodo.MainActivity.SHARED_PREFS_NAME;
+import static com.example.thetodo.MainActivity.viewModel;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -122,8 +127,13 @@ public class Notes_RecyclerView_Adapter extends ListAdapter<Notes,Notes_Recycler
         popupMenu.show();
     }
     private void deleteDialogBox(Notes note, Context cxt) {
-        Notes_Delete_Dialog deleteDialog = new Notes_Delete_Dialog(note);
-        deleteDialog.show(((FragmentActivity)cxt).getSupportFragmentManager(), "Delete Note");
+        SharedPreferences sharedPreferences = cxt.getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
+        if(!sharedPreferences.getBoolean("NEVER_REMIND_NOTES_DELETE", false)){
+            Notes_Delete_Dialog deleteDialog = new Notes_Delete_Dialog(note);
+            deleteDialog.show(((FragmentActivity)cxt).getSupportFragmentManager(), "Delete Note");
+            return;
+        }
+        viewModel.delete(note);
     }
 
 

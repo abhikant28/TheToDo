@@ -6,7 +6,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Prefereances.Preferences_Main">
-
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleTextAppearance="@style/toolbarStyle"/>
     <androidx.cardview.widget.CardView
         android:id="@+id/Preference_Background"
         android:layout_width="match_parent"
@@ -24,6 +27,7 @@
                 android:textSize="25dp"
                 android:layout_weight="1"/>
             <ImageView
+                android:id="@+id/Preference_Background_Icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:background="@color/teal_700"

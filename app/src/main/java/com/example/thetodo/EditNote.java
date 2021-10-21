@@ -50,8 +50,8 @@ public class EditNote extends AppCompatActivity {
         setContentView(R.layout.activity_edit_note);
 
         toolbar=findViewById(R.id.EditNote_Toolbar1);
-        setSupportActionBar(toolbar);
         toolbar.setTitle("");
+        setSupportActionBar(toolbar);
 
 
         viewModel = ViewModelProviders.of(this).get(TheViewModel.class);
@@ -72,16 +72,16 @@ public class EditNote extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-
-        if(getIntent().getBooleanExtra("isNew", true)){
-            inflater.inflate(R.menu.menu_group_select, menu);
-        }
-        inflater.inflate(R.menu.menu_editnote_typeselect, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//
+//        if(getIntent().getBooleanExtra("isNew", true)){
+//            inflater.inflate(R.menu.menu_group_select, menu);
+//        }
+//        inflater.inflate(R.menu.menu_editnote_typeselect, menu);
+//        return true;
+//    }
 
     @Override
     public void finish() {

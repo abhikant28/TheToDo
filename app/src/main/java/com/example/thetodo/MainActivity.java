@@ -6,9 +6,13 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +28,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -31,10 +36,10 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.thetodo.AppObjects.Groups;
 import com.example.thetodo.AppObjects.Notes;
 import com.example.thetodo.AppObjects.Tasks;
 import com.example.thetodo.DataBase.TheViewModel;
+import com.example.thetodo.Prefereances.Preferences_Main;
 import com.example.thetodo.dialogBoxes.NewGroup_Dialog;
 
 import java.text.SimpleDateFormat;
@@ -44,15 +49,16 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static TheViewModel viewModel;
+    public static final String SHARED_PREFS_NAME = "NotesPreferences";
     public static Tasks theTask = new Tasks("", false, "");
     private Calendar calen;
-    private boolean setReminder=false;
-    public static String REPEAT_TYPE_ONCE="Once";
-    public static String REPEAT_TYPE_DAILY="Daily";
-    public static String REPEAT_TYPE_WEEKLY="Weekly";
-    public static String REPEAT_TYPE_MONTHLY="Monthly";
-    public static String REPEAT_TYPE_YEARLY="Yearly";
-    public static RelativeLayout MAIN_ACTIVITY_LAYOUT;
+    private boolean setReminder = false;
+    public static String REPEAT_TYPE_ONCE = "Once";
+    public static String REPEAT_TYPE_DAILY = "Daily";
+    public static String REPEAT_TYPE_WEEKLY = "Weekly";
+    public static String REPEAT_TYPE_MONTHLY = "Monthly";
+    public static String REPEAT_TYPE_YEARLY = "Yearly";
+    public static RelativeLayout MAIN_ACTIVITY_LAYOUT = null;
 
     private RecyclerView task_RecyclerView;
     public final Task_RecyclerView_Adapter task_adapter = new Task_RecyclerView_Adapter();
@@ -62,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     public final Notes_Groups_ExpandableList_Adapter notes_groups_adapter = new Notes_Groups_ExpandableList_Adapter(this);
 
 
+    private Toolbar toolbar;
     private EditText ev_task_tapToAdd;
     private TextView tv_task_remind;
     private TextView tv_task_repeat;
@@ -70,20 +77,53 @@ public class MainActivity extends AppCompatActivity {
     private Button b_add_task;
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        notes_groups_adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.MainMenu_Settings) {
+            startActivity(new Intent(this, Preferences_Main.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MAIN_ACTIVITY_LAYOUT= findViewById(R.id.MAIN_RELATIVELAYOUT);
+
+        toolbar = findViewById(R.id.MainActivity_Toolbar);
+        Log.i("DATE::::::::", String.valueOf(java.util.Calendar.getInstance().getTime()));
+        String date = String.valueOf(Calendar.getInstance().getTime());
+        toolbar.setTitle(date.substring(4, 10) + ", " + date.substring(0, 4));
+        setSupportActionBar(toolbar);
+
+        MAIN_ACTIVITY_LAYOUT = findViewById(R.id.MAIN_RELATIVELAYOUT);
         task_RecyclerView = findViewById(R.id.Main_Super_Task_RecyclerView);
-        notes_group_View = findViewById(R.id.Main_Notes_Super_GroupedNotes_RecyclerView);
+//        notes_group_View = findViewById(R.id.Main_Notes_Super_GroupedNotes_RecyclerView);
         notes_all_RecyclerView = findViewById(R.id.Main_Super_RecyclerView_AllNotes_List);
         ev_task_tapToAdd = findViewById(R.id.Main_Task_TapToAdd);
         b_add_task = findViewById(R.id.Main_Task_ImageButton_AddButton);
-        tv_task_remind = findViewById(R.id.Main_Task_TextView_Remind);
-        tv_task_repeat = findViewById(R.id.Main_Task_TextView_Repeat);
-        tv_notes_newGroup = findViewById(R.id.Main_Notes_TextView_NewNoteGroup);
+//        tv_task_remind = findViewById(R.id.Main_Task_TextView_Remind);
+//        tv_task_repeat = findViewById(R.id.Main_Task_TextView_Repeat);
+//        tv_notes_newGroup = findViewById(R.id.Main_Notes_TextView_NewNoteGroup);
         tv_notes_newNote = findViewById(R.id.Main_Notes_TextView_NewNote);
+        MAIN_ACTIVITY_LAYOUT.setBackgroundColor(Color.parseColor("#EFD75C"));
+
+        getPreferences();
 
         viewModel = ViewModelProviders.of(this).get(TheViewModel.class);
 
@@ -99,25 +139,25 @@ public class MainActivity extends AppCompatActivity {
                 task_adapter.submitList(tasks);
             }
         });
-        viewModel.getAllGroups().observe(this, new Observer<List<Groups>>() {
-            @Override
-            public void onChanged(List<Groups> groups) {
-                notes_groups_adapter.setList(groups);
-            }
-        });
+//        viewModel.getAllGroups().observe(this, new Observer<List<Groups>>() {
+//            @Override
+//            public void onChanged(List<Groups> groups) {
+//                notes_groups_adapter.setList(groups);
+//            }
+//        });
 
         setTaskAdapter();
         setAllNotesAdapter();
-        setNotesGroupsAdapter();
+//        setNotesGroupsAdapter();
 
-        tv_task_remind.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!ev_task_tapToAdd.getText().toString().trim().isEmpty()) {
-                    calen = setTaskTimeDate();
-                }
-            }
-        });
+//        tv_task_remind.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (!ev_task_tapToAdd.getText().toString().trim().isEmpty()) {
+//                    calen = setTaskTimeDate();
+//                }
+//            }
+//        });
 
         ev_task_tapToAdd.addTextChangedListener(checkText);
 
@@ -127,20 +167,20 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), EditNote.class));
             }
         });
-        tv_notes_newGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openNewGroupDialog();
-            }
-        });
-        tv_task_repeat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!ev_task_tapToAdd.getText().toString().trim().isEmpty()){
-                    repeatPopup();
-                }
-            }
-        });
+//        tv_notes_newGroup.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                openNewGroupDialog();
+//            }
+//        });
+//        tv_task_repeat.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(!ev_task_tapToAdd.getText().toString().trim().isEmpty()){
+//                    repeatPopup();
+//                }
+//            }
+//        });
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -152,9 +192,9 @@ public class MainActivity extends AppCompatActivity {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 Tasks task = task_adapter.getTask(viewHolder.getAdapterPosition());
                 if (task.isCompleted()) {
-                    if(task.getDate()==null || task.getType().equals(REPEAT_TYPE_ONCE)){
+                    if (task.getDate() == null || task.getType().equals(REPEAT_TYPE_ONCE)) {
                         viewModel.delete(task);
-                    }else{
+                    } else {
                         task.setShow(false);
                         viewModel.update(task);
                     }
@@ -170,13 +210,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     private void repeatPopup() {
         PopupMenu popupMenu = new PopupMenu(this, tv_task_repeat);
         popupMenu.inflate(R.menu.long_press_menu);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.Repeat_Option_once:
                         theTask.setType(REPEAT_TYPE_ONCE);
                         tv_task_repeat.setText(REPEAT_TYPE_ONCE);
@@ -230,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         new DatePickerDialog(MainActivity.this, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
-        setReminder=true;
+        setReminder = true;
         return calendar;
     }
 
@@ -249,13 +290,13 @@ public class MainActivity extends AppCompatActivity {
             if (charSequence.toString().trim().length() > 0) {
                 theTask.setTitle(charSequence.toString());
                 b_add_task.setEnabled(true);
-                tv_task_remind.setClickable(true);
-                tv_task_repeat.setClickable(true);
+//                tv_task_remind.setClickable(true);
+//                tv_task_repeat.setClickable(true);
             } else {
-                theTask=new Tasks("", false, "");
+                theTask = new Tasks("", false, "");
                 b_add_task.setEnabled(false);
-                tv_task_remind.setClickable(false);
-                tv_task_repeat.setClickable(false);
+//                tv_task_remind.setClickable(false);
+//                tv_task_repeat.setClickable(false);
             }
         }
 
@@ -265,11 +306,9 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+
     private void setNotesGroupsAdapter() {
         notes_group_View.setAdapter(notes_groups_adapter);
-
-//        notes_groups_adapter.setOnItemClickListener(new );
-
     }
 
     private void setTaskAdapter() {
@@ -306,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
     public void addTask(View view) {
         if (!ev_task_tapToAdd.getText().toString().trim().isEmpty()) {
 
-            if(setReminder){
+            if (setReminder) {
                 Intent intent = new Intent(this, AlertReceiver.class);
                 intent.putExtra("title", "Reminder : ");
                 intent.putExtra("body", theTask.getTitle());
@@ -318,15 +357,15 @@ public class MainActivity extends AppCompatActivity {
                 theTask.setDate(calen);
                 viewModel.insert(theTask);
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, calen.getTimeInMillis(), pendingIntent);
-                setReminder=false;
-            }else{
+                setReminder = false;
+            } else {
                 viewModel.insert(theTask);
             }
-            theTask=new Tasks("", false, "");
+            theTask = new Tasks("", false, "");
             ev_task_tapToAdd.setText("");
-            tv_task_remind.setText("Remind");
-            tv_task_repeat.setText("Repeat");
-        }else{
+//            tv_task_remind.setText("Remind");
+//            tv_task_repeat.setText("Repeat");
+        } else {
             Toast.makeText(this, "Type task to add", Toast.LENGTH_SHORT).show();
         }
     }
@@ -338,9 +377,15 @@ public class MainActivity extends AppCompatActivity {
         alarmManager.cancel(pendingIntent);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        notes_groups_adapter.notifyDataSetChanged();
+    public void goToSetting(MenuItem item) {
+        startActivity(new Intent(this, Preferences_Main.class));
+    }
+
+    public void getPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
+        if (sharedPreferences.getBoolean("IS_BG_PREF_SET", false)) {
+            String colorHex = sharedPreferences.getString("BG_COLOR", "FFDAD5");
+            MAIN_ACTIVITY_LAYOUT.setBackgroundColor(Color.parseColor("#" + colorHex));
+        }
     }
 }

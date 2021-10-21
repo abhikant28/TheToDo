@@ -25,6 +25,8 @@
         android:layout_height="28dp"
         android:layout_gravity="center"
         android:layout_weight="1"
+        android:textSize="21dp"
+        android:text="Task"
         android:ellipsize="end"/>
     <TextView
         android:id="@+id/Main_Task_List_Item_Type"

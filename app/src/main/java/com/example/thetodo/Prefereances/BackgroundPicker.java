@@ -1,28 +1,30 @@
 package com.example.thetodo.Prefereances;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import static com.example.thetodo.MainActivity.SHARED_PREFS_NAME;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.thetodo.MainActivity;
 import com.example.thetodo.R;
@@ -36,8 +38,8 @@ public class BackgroundPicker extends AppCompatActivity {
     Uri img_uri;
     Toolbar toolbar;
     ImageView iv_bg;
-    String colorHex="FFFFFF";
-    boolean bgIMG=false;
+    String colorHex = "EFD75C";
+    boolean bgIMG = false;
     Bitmap img;
     private String BG_Uri;
 
@@ -46,8 +48,9 @@ public class BackgroundPicker extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.preferences_picker_bg);
 
-        toolbar=findViewById(R.id.BackgroundPicker_Toolbar);
-        iv_bg=findViewById(R.id.BackgroundPicker_Background);
+        toolbar = findViewById(R.id.BackgroundPicker_Toolbar);
+        iv_bg = findViewById(R.id.BackgroundPicker_Background);
+        iv_bg.setBackgroundColor(Color.parseColor("#EFD75C"));
         setSupportActionBar(toolbar);
 
     }
@@ -58,45 +61,47 @@ public class BackgroundPicker extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId()==R.id.BackgroundPicker_SaveButton){
-            saveBackground();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
-    private void saveBackground() {
-        if(bgIMG){
-           BG_Uri = saveToSdCard (img,"Yellow");
-        }else{
-            MainActivity.MAIN_ACTIVITY_LAYOUT.setBackgroundColor(Color.parseColor("#"+colorHex));
+    public void saveBackground(MenuItem item) {
+        if (bgIMG) {
+            BG_Uri = saveToSdCard(img, "Yellow");
+        } else {
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
+            SharedPreferences.Editor SPeditor = sharedPreferences.edit();
+            SPeditor.putString("BG_COLOR", colorHex);
+            SPeditor.putBoolean("IS_BG_PREF_SET", true);
+            SPeditor.apply();
+            MainActivity.MAIN_ACTIVITY_LAYOUT.setBackgroundColor(Color.parseColor("#" + colorHex));
+
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==300 && requestCode==RESULT_OK){
-            img_uri= data.getData();
+        if (requestCode == 300 && resultCode == RESULT_OK) {
+            img_uri = data.getData();
 
             try {
-                img= MediaStore.Images.Media.getBitmap(this.getContentResolver() , Uri.parse(String.valueOf(img_uri)));
+                img = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(String.valueOf(img_uri)));
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
             }
             Drawable drawable = new BitmapDrawable(getResources(), img);
             iv_bg.setBackground(drawable);
-            bgIMG=true;
+            Log.i("IMG PICKER::::", "Recieved");
+            bgIMG = true;
         }
     }
 
     public void pickImage(View view) {
-        if(ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+        Log.i("IMG PICKER::::", "Started");
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            Log.i("IMG PICKER::::", "false");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 8);
-        }else{
+        } else {
+            Log.i("IMG PICKER::::", "true");
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -106,35 +111,47 @@ public class BackgroundPicker extends AppCompatActivity {
 
 
     public void colorSelected(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.BackgroundPicker_Color_LightYellow:
-                colorHex="EFD75C";
-                return;
+                colorHex = "EFD75C";
+                break;
+            case R.id.BackgroundPicker_Color_Lavender:
+                colorHex = "D0B9C3";
+                break;
+            case R.id.BackgroundPicker_Color_Peach:
+                colorHex = "FFDAD5";
+                break;
+            case R.id.BackgroundPicker_Color_Louis:
+                colorHex = "b9c3d0";
+                break;
             case R.id.BackgroundPicker_Color_Yellow:
-                colorHex="F9DD25";
-                return;
+                colorHex = "F9DD25";
+                break;
             case R.id.BackgroundPicker_Color_LightBlue:
-                colorHex="44A7E3";
-                return;
+                colorHex = "44A7E3";
+                break;
             case R.id.BackgroundPicker_Color_Blue:
-                colorHex="1565C0";
-                return;
+                colorHex = "1565C0";
+                break;
             case R.id.BackgroundPicker_Color_Red:
-                colorHex="C14646";
-                return;
+                colorHex = "C14646";
+                break;
             case R.id.BackgroundPicker_Color_Teal:
-                colorHex="FF018786";
-                return;
+                colorHex = "FF018786";
+                break;
             case R.id.BackgroundPicker_Color_Green:
-                colorHex="2E7D32";
-                return;
+                colorHex = "2E7D32";
+                break;
             case R.id.BackgroundPicker_Color_Purple:
-                colorHex="6A1B9A";
-                return;
+                colorHex = "6A1B9A";
+                break;
             case R.id.BackgroundPicker_Color_LightGreen:
-                colorHex="558B2F";
-                return;
+                colorHex = "558B2F";
+                break;
         }
+        bgIMG = false;
+        iv_bg.setBackgroundColor(Color.parseColor("#" + colorHex));
+
     }
 
 
@@ -142,14 +159,17 @@ public class BackgroundPicker extends AppCompatActivity {
 
         String stored = null;
 
-        File sdcard = Environment.getExternalStorageDirectory() ;
+        File sdcard = Environment.getExternalStorageDirectory();
 
-        File folder = new File(sdcard.getAbsoluteFile(), ".your_specific_directory");//the dot makes this directory hidden to the user
-        folder.mkdir();
-        File file = new File(folder.getAbsoluteFile(), filename + ".png") ;
-        stored= folder.getAbsoluteFile()+ filename + ".png";
+        File path = new File(sdcard.getAbsoluteFile(), ".directory");//the dot makes this directory hidden to the user
+        if(!path.exists()){
+            path.mkdir();
+        }
+        File file = new File(path.getAbsoluteFile(), filename + ".png");
+        Log.i("IMG ::::", filename+"///////"+file);
+        stored = path.getAbsoluteFile() + filename + ".png";
         try {
-            FileOutputStream out = new FileOutputStream(file);
+            FileOutputStream out = new FileOutputStream(stored);
             bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
             out.flush();
             out.close();
@@ -168,11 +188,13 @@ public class BackgroundPicker extends AppCompatActivity {
             if (!myDir.exists())
                 return null;
 
-            mediaImage = new File(myDir.getPath() + "/.your_specific_directory/"+imagename);
+            mediaImage = new File(myDir.getPath() + "/.directory/" + imagename);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return mediaImage;
     }
+
+
 }
