@@ -39,7 +39,7 @@
         android:textSize="20dp"
         android:padding="15dp"
         android:gravity="start"
-        android:hint="Type away...."
+        android:hint="Note...."
         android:layout_weight="1"/>
     <ImageView
         android:onClick="pic"

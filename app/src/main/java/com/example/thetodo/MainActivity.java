@@ -41,6 +41,10 @@ import com.example.thetodo.AppObjects.Tasks;
 import com.example.thetodo.DataBase.TheViewModel;
 import com.example.thetodo.Prefereances.Preferences_Main;
 import com.example.thetodo.dialogBoxes.NewGroup_Dialog;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -104,6 +108,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MobileAds.initialize(this);
+
+        AdView adView = findViewById(R.id.AdView);
+         AdRequest adRequest = new AdRequest.Builder().build();
+
+         adView.loadAd(adRequest);
 
         toolbar = findViewById(R.id.MainActivity_Toolbar);
         Log.i("DATE::::::::", String.valueOf(java.util.Calendar.getInstance().getTime()));
