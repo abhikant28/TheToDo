@@ -17,6 +17,11 @@
 
     </style>
     <style name="toolbarStyle" parent="@style/Base.TextAppearance.AppCompat.Title">
-        <item name="android:textSize">44sp</item>
+        <item name="android:textSize">34sp</item>
+    </style>
+
+    <style name="OcrOutputPopUpDialog">
+        <item name="android:windowEnterAnimation">@anim/ocr_dialog_box_slide_up</item>
+        <item name="android:windowExitAnimation">@anim/ocr_dialog_box_slide_down</item>
     </style>
 </resources>

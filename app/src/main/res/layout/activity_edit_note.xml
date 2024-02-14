@@ -3,51 +3,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context=".EditNote">
-<!--    android:background="#FFFF99">-->
+    <!--    android:background="#FFFF99">-->
 
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/EditNote_Toolbar2"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"/>-->
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/EditNote_Toolbar1"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/NotesEditor_EditTextView_Title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textCapSentences"
-        android:textSize="30dp"
-        android:padding="15dp"
-        android:hint="Title"/>
+        <!--    <androidx.appcompat.widget.Toolbar-->
+        <!--        android:id="@+id/EditNote_Toolbar2"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="wrap_content"/>-->
 
-    <EditText
-        android:id="@+id/NotesEditor_EditTextView_all"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:textSize="20dp"
-        android:padding="15dp"
-        android:gravity="start"
-        android:hint="Note...."
-        android:layout_weight="1"/>
-    <ImageView
-        android:onClick="pic"
-        android:src="@mipmap/ic_launcher"
-        android:id="@+id/NotesEditor_ImageView_image"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="invisible"/>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/EditNote_Toolbar1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-</LinearLayout>
+        <EditText
+            android:id="@+id/NotesEditor_EditTextView_Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Title.... "
+            android:backgroundTint="#00000000"
+            android:inputType="textCapSentences"
+            android:textStyle="bold"
+            android:padding="15dp"
+            android:textSize="30dp" />
+
+        <EditText
+            android:id="@+id/NotesEditor_EditTextView_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/drawable_line_at_bottom"
+            android:backgroundTint="@android:color/transparent"
+            android:gravity="start"
+            android:hint="Note...."
+            android:inputType="textMultiLine"
+            android:padding="15dp"
+            android:layout_weight="1"
+            android:textSize="20dp" />
+
+        <ImageView
+            android:id="@+id/NotesEditor_ImageView_image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:onClick="pic"
+            android:src="@mipmap/ic_launcher"
+            android:visibility="invisible" />
+
+    </LinearLayout>
 </LinearLayout>

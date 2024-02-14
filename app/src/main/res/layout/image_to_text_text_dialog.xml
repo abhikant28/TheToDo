@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/image_to_text_dialog_bg"
+    android:padding="20sp">
+
+    <ProgressBar
+        android:id="@+id/OCR_progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="6sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/OCR_textView_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Text from Image"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/OCR_imageView_cover"
+        android:layout_width="match_parent"
+        android:layout_height="0sp"
+        android:elevation="5sp"
+        android:alpha="0.8"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/OCR_editText_output"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#Fff5F5"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false"
+        android:hint="@string/text_extracted_from_image"
+        android:inputType="textMultiLine"
+        android:maxLines="6"
+        android:minLines="4"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@+id/OCR_textView_heading"
+        tools:layout_editor_absoluteX="20dp" />
+
+    <Button
+        android:id="@+id/OCR_button_copy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/teal_700"
+        android:onClick="copyImageText"
+        android:textColor="@color/white"
+        android:paddingHorizontal="30sp"
+        android:text="Copy Text"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/OCR_editText_output"
+        app:layout_constraintTop_toBottomOf="@+id/OCR_editText_output" />
+
+    <Button
+        android:id="@+id/OCR_button_dismiss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:backgroundTint="#706F6F"
+        android:paddingHorizontal="30sp"
+        android:textColor="@color/white"
+        android:text="Dismiss"
+        app:layout_constraintEnd_toEndOf="@+id/OCR_editText_output"
+        app:layout_constraintTop_toBottomOf="@+id/OCR_editText_output" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

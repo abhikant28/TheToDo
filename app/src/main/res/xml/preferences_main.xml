@@ -1,0 +1,17 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+        <Preference
+            app:key="Preference_changeBackground"
+            app:title="Change Background"
+            app:icon="@drawable/ic_baseline_color_lens_24"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreference
+            app:key="Preference_addNewTaskToBottom"
+            app:icon="@drawable/drw_add_new_to_bottom"
+            app:title="Show tasks newer tasks on top " />
+    <Preference
+        app:key="Preference_feedback"
+        app:title="Help &amp; Feedback"
+        app:icon="@drawable/ic_outline_help_outline_24"
+        app:useSimpleSummaryProvider="true" />
+</PreferenceScreen>

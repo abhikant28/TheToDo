@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:115867878765:android:5673f63edf321260f88664",
         "android_client_info": {
-          "package_name": "com.example.thetodo"
+          "package_name": "akw.android.thetodo"
         }
       },
       "oauth_client": [

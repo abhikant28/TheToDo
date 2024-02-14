@@ -4,23 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Prefereances.BackgroundPicker">
+    android:fitsSystemWindows="true"
+    tools:context=".Preferences.BackgroundPicker">
 
     <ImageView
         android:id="@+id/BackgroundPicker_Background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFDAD5"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="65dp" />
+        android:scaleType="centerCrop" />
+
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/BackgroundPicker_Toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:title="Choose a Background"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleMarginTop="10dp" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
@@ -37,7 +39,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/Main_Task_ImageButton_AddButton"
+                android:id="@+id/Pref_BG_Task_ImageButton_AddButton"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -45,26 +47,25 @@
                 android:enabled="true" />
 
             <EditText
-                android:id="@+id/Main_Task_TapToAdd"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Tap to add Task"
+                android:hint="@string/tap_to_add_task"
                 android:inputType="textCapSentences" />
 
-            <TextView
-                android:id="@+id/Main_Task_TextView_Remind"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:paddingHorizontal="5dp"
-                android:text="Remind" />
+            <!--            <TextView-->
+            <!--                android:id="@+id/Pref_BG_Task_TextView_Remind"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:clickable="true"-->
+            <!--                android:paddingHorizontal="5dp"-->
+            <!--                android:text="Remind" />-->
 
             <TextView
-                android:id="@+id/Main_Task_TextView_Repeat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
+                android:focusable="true"
                 android:paddingHorizontal="5dp"
                 android:text="Repeat" />
         </LinearLayout>
@@ -85,7 +86,7 @@
             android:orientation="horizontal">
 
             <CheckBox
-                android:id="@+id/Main_Task_List_Item_checkButton"
+                android:id="@+id/Pref_BG_Task_List_Item_checkButton"
                 style="@android:style/Widget.DeviceDefault.Light.CompoundButton.RadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -94,7 +95,7 @@
                 android:text="" />
 
             <TextView
-                android:id="@+id/Main_Task_List_Item_Title"
+                android:id="@+id/Pref_BG_Task_List_Item_Title"
                 android:layout_width="0dp"
                 android:layout_height="28dp"
                 android:layout_gravity="center"
@@ -104,7 +105,7 @@
                 android:textSize="21dp" />
 
             <TextView
-                android:id="@+id/Main_Task_List_Item_Type"
+                android:id="@+id/Pref_BG_Task_List_Item_Type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="10dp"
@@ -127,7 +128,7 @@
         app:layout_constraintVertical_bias="0.55">
 
         <LinearLayout
-            android:id="@+id/Main_RecyclerView_List_Item_LinearLayout1"
+            android:id="@+id/Pref_BG_RecyclerView_List_Item_LinearLayout1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -139,7 +140,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/Main_TextView_List_Item_Title"
+                    android:id="@+id/Pref_BG_TextView_List_Item_Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
@@ -147,7 +148,7 @@
                     android:textSize="26dp" />
 
                 <TextView
-                    android:id="@+id/Main_RecyclerView_List_Item_Time"
+                    android:id="@+id/Pref_BG_RecyclerView_List_Item_Time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
@@ -158,7 +159,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/Main_RecyclerView_List_Item_Sub"
+                android:id="@+id/Pref_BG_RecyclerView_List_Item_Sub"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -187,13 +188,21 @@
             android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <!--                <ImageView-->
-            <!--                    android:id="@+id/BackgroundPicker_ImagePick"-->
-            <!--                    android:layout_width="50dp"-->
-            <!--                    android:layout_height="100dp"-->
-            <!--                    android:layout_marginStart="5dp"-->
-            <!--                    android:background="@drawable/add_button_task"-->
-            <!--                    android:onClick="pickImage" />-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#373737"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/BackgroundPicker_ImagePick"
+                    android:layout_width="50sp"
+                    android:layout_height="50sp"
+                    android:layout_gravity="center"
+                    android:onClick="pickImage"
+                    android:src="@drawable/ic_twotone_image_24" />
+            </LinearLayout>
+
             <ImageView
                 android:id="@+id/BackgroundPicker_Color_Peach"
                 android:layout_width="50dp"
@@ -281,6 +290,14 @@
                 android:layout_height="100dp"
                 android:layout_marginStart="5dp"
                 android:background="#558B2F"
+                android:onClick="colorSelected" />
+
+            <ImageView
+                android:id="@+id/BackgroundPicker_Color_Black"
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="5dp"
+                android:background="#010400"
                 android:onClick="colorSelected" />
 
             <ImageView

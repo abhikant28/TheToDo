@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
-    <item android:id="@+id/NoteEdit_MenuOption_TextButton"
-        android:icon="@drawable/ic_baseline_format_color_text_24"
-        android:title="Text"
-        app:showAsAction="always"/>
-    <item android:id="@+id/NoteEdit_MenuOption_Draw"
-        android:icon="@drawable/ic_baseline_draw_24"
-        android:title="Draw"
-        app:showAsAction="always"/>
-    <item android:id="@+id/NoteEdit_MenuOption_Media"
-        android:icon="@drawable/ic_baseline_attach_file_24"
-        android:title="Media"
-        app:showAsAction="always"/>
-    <item android:id="@+id/NoteEdit_MenuOption_Others"
-        android:icon="@drawable/ic_baseline_pending_24"
-        android:title="Others"
-        app:showAsAction="always"/>
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/NoteEdit_MenuOption_ReadAloud"
+        android:icon="@drawable/ic_outline_contactless_24"
+        android:title="Read Aloud" />
+
+    <item android:id="@+id/NoteEdit_MenuOption_ScanText"
+        android:icon="@drawable/ic_outline_contactless_24"
+        android:title="Scan Text" />
+
+    <item android:id="@+id/NoteEdit_MenuOption_Colloborate"
+        android:icon="@drawable/ic_outline_contactless_24"
+        android:title="Collaborate" />
+
 </menu>

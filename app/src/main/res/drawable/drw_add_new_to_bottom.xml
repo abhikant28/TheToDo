@@ -1,0 +1,17 @@
+<vector
+    android:height="24dp"
+    android:width="24dp"
+    android:viewportHeight="24"
+    android:viewportWidth="24"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- All lines merged into one pathData attribute -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M4,13h16v-2h-16zM4,17h16v-2h-16zM4,9h16L20,7L4,7v2M4,19h8v2h-8z"/>
+
+    <!-- Arrow pointing left at the bottom right, moved lower and aligned with the last line -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M19,23v-2h-1v2L16,20l2,-2v2h1v-2z"
+/></vector>

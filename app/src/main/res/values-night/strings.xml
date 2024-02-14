@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="new_note">+ New Note</string>
+    <string name="tap_to_add_task">Tap to add Task</string>
+    <string name="change_notes_layout">Change Notes Layout</string>
+    <string name="change_background">Change Background</string>
+    <string name="abhikant_awasthi_all_rights_reserved">Abhikant Awasthi. © All rights reserved.</string>
+    <string name="text_extracted_from_image">Text Extracted from Image...</string>
+    <string name="upcoming_tasks">Upcoming Tasks</string>
+    <string name="no_upcoming_tasks">No Upcoming Tasks</string>
+</resources>

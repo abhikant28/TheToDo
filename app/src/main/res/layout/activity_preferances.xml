@@ -1,40 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Preference_Main_Background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Prefereances.Preferences_Main">
-    <androidx.appcompat.widget.Toolbar
+    tools:context=".Preferences.Preferences_Main">
+
+
+    <ImageView
+        android:id="@+id/Pref_IMG_BG"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_baseline_add_24"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:titleTextAppearance="@style/toolbarStyle"/>
-    <androidx.cardview.widget.CardView
-        android:id="@+id/Preference_Background"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingHorizontal="3sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/PreferenceMain_Toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:backgroundTint="#57000000"
+            android:fitsSystemWindows="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Background Colour"
-                android:textSize="25dp"
-                android:layout_weight="1"/>
-            <ImageView
-                android:id="@+id/Preference_Background_Icon"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@color/teal_700"
-                android:onClick="chooseBG"/>
+    <FrameLayout
+        android:id="@+id/PreferencesMain_FrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="@id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/PreferenceMain_Toolbar" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="mail"
+        android:text="@string/abhikant_awasthi_all_rights_reserved"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/Pref_IMG_BG"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
 
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
