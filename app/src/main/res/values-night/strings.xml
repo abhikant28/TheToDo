@@ -8,4 +8,5 @@
     <string name="text_extracted_from_image">Text Extracted from Image...</string>
     <string name="upcoming_tasks">Upcoming Tasks</string>
     <string name="no_upcoming_tasks">No Upcoming Tasks</string>
+    <string name="title">Title....</string>
 </resources>

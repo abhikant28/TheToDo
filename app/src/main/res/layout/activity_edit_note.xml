@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context=".EditNote">
-    <!--    android:background="#FFFF99">-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <!--    <androidx.appcompat.widget.Toolbar-->
-        <!--        android:id="@+id/EditNote_Toolbar2"-->
-        <!--        android:layout_width="match_parent"-->
-        <!--        android:layout_height="wrap_content"/>-->
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/EditNote_Toolbar1"
@@ -27,33 +26,194 @@
             android:id="@+id/NotesEditor_EditTextView_Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Title.... "
             android:backgroundTint="#00000000"
+            android:hint="@string/title"
             android:inputType="textCapSentences"
-            android:textStyle="bold"
             android:padding="15dp"
-            android:textSize="30dp" />
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/NotesEditor_EditTextView_all"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@drawable/drawable_line_at_bottom"
             android:backgroundTint="@android:color/transparent"
             android:gravity="start"
             android:hint="Note...."
             android:inputType="textMultiLine"
             android:padding="15dp"
-            android:layout_weight="1"
             android:textSize="20dp" />
 
-        <ImageView
-            android:id="@+id/NotesEditor_ImageView_image"
+        <LinearLayout
+            android:id="@+id/NotesEditor_ll_bottom"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:onClick="pic"
-            android:src="@mipmap/ic_launcher"
-            android:visibility="invisible" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/note_edit_bottom_tools_background"
+            android:outlineAmbientShadowColor="@color/black"
+            android:gravity="center_horizontal"
+            android:visibility="visible">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/NotesEditor_cv_list"
+                android:layout_width="45sp"
+                android:layout_height="45sp"
+                app:cardCornerRadius="200sp"
+                android:layout_margin="5sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/NotesEditor_iv_list"
+                    android:layout_width="35sp"
+                    android:layout_height="35sp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_round_view_list_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:onClick="listButton"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/NotesEditor_cv_bold"
+                android:layout_width="45sp"
+                android:layout_height="45sp"
+                app:cardCornerRadius="200sp"
+                android:layout_margin="5sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/NotesEditor_iv_bold"
+                    android:layout_width="35sp"
+                    android:layout_height="35sp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_baseline_format_bold_24_black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/NotesEditor_cv_italic"
+                android:layout_width="45sp"
+                android:layout_height="45sp"
+                app:cardCornerRadius="200sp"
+                android:layout_margin="5sp"
+                android:backgroundTint="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/NotesEditor_iv_italic"
+                    android:layout_width="35sp"
+                    android:layout_height="35sp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_round_format_italic_24_white"
+                    android:onClick="boldButton"
+                    android:backgroundTint="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/NotesEditor_cv_underLine"
+                android:layout_width="45sp"
+                android:layout_height="45sp"
+                app:cardCornerRadius="200sp"
+                android:layout_margin="5sp"
+                android:outlineAmbientShadowColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/NotesEditor_iv_underLine"
+                    android:layout_width="35sp"
+                    android:layout_height="35sp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_baseline_format_underlined_24_black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/NotesEditor_cv_strike"
+                android:layout_width="45sp"
+                android:layout_height="45sp"
+                app:cardCornerRadius="200sp"
+                android:layout_margin="5sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/NotesEditor_iv_strike"
+                    android:layout_width="35sp"
+                    android:layout_height="35sp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_baseline_format_strikethrough_24_white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/NotesEditor_cv_alignment"
+                android:layout_width="45sp"
+                android:layout_height="45sp"
+                app:cardCornerRadius="200sp"
+                android:layout_margin="5sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/NotesEditor_iv_alignment"
+                    android:layout_width="35sp"
+                    android:layout_height="35sp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_round_format_align_left_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.cardview.widget.CardView>
+
+
+
+
+        </LinearLayout>
 
     </LinearLayout>
-</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/NotesEditor_cv_stop"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            app:cardCornerRadius="25sp"
+            android:visibility="gone"
+            android:backgroundTint="#B2B5B4">
+
+            <ImageView
+                android:id="@+id/NotesEditor_iv_stop"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:src="@drawable/ic_round_stop_24"
+                android:layout_margin="10sp"/>
+        </androidx.cardview.widget.CardView>
+        
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

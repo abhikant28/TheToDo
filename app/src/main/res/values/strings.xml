@@ -25,4 +25,5 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="upcoming_tasks">Upcoming Tasks</string>
     <string name="no_upcoming_tasks">No Upcoming Tasks</string>
+    <string name="title">Title....</string>
 </resources>

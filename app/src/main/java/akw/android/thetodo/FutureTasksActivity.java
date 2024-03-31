@@ -26,7 +26,7 @@ import java.io.InputStream;
 import akw.android.thetodo.Adapter.FutureTask_RecyclerView_Adapter;
 import akw.android.thetodo.DataBase.TheViewModel;
 
-public class FutureTasks extends AppCompatActivity {
+public class FutureTasksActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 

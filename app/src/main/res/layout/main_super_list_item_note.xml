@@ -29,6 +29,7 @@
                 android:padding="5sp"
                 android:paddingBottom="2sp"
                 android:text="Title"
+                android:maxLines="1"
                 android:textStyle="bold"
                 android:layout_weight="1"
                 android:textSize="22sp" />

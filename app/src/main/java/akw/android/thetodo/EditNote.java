@@ -8,11 +8,20 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextWatcher;
+import android.text.style.StrikethroughSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -30,12 +39,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
@@ -58,15 +66,14 @@ public class EditNote extends AppCompatActivity {
     private EditText ev_title, ev_desc;
     private int n_id, g_id;
     private Notes theNote;
-    private boolean isNew = true;
+    private boolean isNew = true, textBold = false, textItalic = false, textUnderline = false, textStrike = false;
     private Bitmap bmpImg;
-    private ImageView iv_image;
+    private ImageView iv_image, iv_image_text_dialog_cover;
     private Toolbar toolbar;
     private TextToSpeech textToSpeech;
-    private TextRecognizer textRecognizer;
-    private ImageView iv_image_text_dialog_cover;
     private EditText et_image_text_dialog_output;
     private ProgressBar pb_image_text_dialog_progress;
+    TextWatcher textWatcher;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -121,6 +128,7 @@ public class EditNote extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.NoteEdit_MenuOption_ReadAloud:
                 readAloud();
+                findViewById(R.id.NotesEditor_cv_stop).setVisibility(View.VISIBLE);
                 break;
             case R.id.NoteEdit_MenuOption_ScanText:
                 Intent intent = new Intent();
@@ -145,7 +153,73 @@ public class EditNote extends AppCompatActivity {
 
         ev_title = findViewById(R.id.NotesEditor_EditTextView_Title);
         ev_desc = findViewById(R.id.NotesEditor_EditTextView_all);
-        iv_image = findViewById(R.id.NotesEditor_ImageView_image);
+//        iv_image = findViewById(R.id.NotesEditor_ImageView_image);
+
+        textWatcher = new TextWatcher() {
+            SpannableStringBuilder previousStyledText;
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String text = s.toString();
+                SpannableStringBuilder spannable = new SpannableStringBuilder(text);
+                int cursorPosition = ev_desc.getSelectionEnd();
+
+                if (textBold || textItalic || textStrike || textUnderline) {
+                    if (textBold) {
+                        spannable.setSpan(new StyleSpan(Typeface.BOLD),
+                                cursorPosition - 1,
+                                cursorPosition,
+                                0);
+                    }
+                    if (textItalic) {
+                        spannable.setSpan(new StyleSpan(Typeface.ITALIC),
+                                cursorPosition - 1,
+                                cursorPosition,
+                                0);
+                    }
+                    if (textStrike) {
+                        spannable.setSpan(new StrikethroughSpan(),
+                                cursorPosition - 1,
+                                cursorPosition,
+                                0);
+                    }
+                    if (textUnderline) {
+                        spannable.setSpan(new StyleSpan(Typeface.BOLD),
+                                cursorPosition - 1,
+                                cursorPosition,
+                                0);
+                    }
+
+
+                    if (previousStyledText != null) {
+                        for (Object span : previousStyledText.getSpans(0, previousStyledText.length(), Object.class)) {
+                            spannable.setSpan(span, previousStyledText.getSpanStart(span), previousStyledText.getSpanEnd(span), previousStyledText.getSpanFlags(span));
+                        }
+                    }
+
+                    ev_desc.removeTextChangedListener(this);
+                    ev_desc.setText(spannable);
+                    if (cursorPosition >= 0 && cursorPosition <= s.length()) {
+                        ev_desc.setSelection(cursorPosition);
+                    } else {
+                        // If the previous cursor position is out of bounds, move it to the end
+                        ev_desc.setSelection(spannable.length());
+                    }
+                    ev_desc.addTextChangedListener(this);
+                    previousStyledText = spannable;
+
+                }
+            }
+
+        };
 
         Intent extras = getIntent();
         if (extras.getBooleanExtra("isNew", true)) {
@@ -156,8 +230,10 @@ public class EditNote extends AppCompatActivity {
             ev_desc.setText(theNote.getBody());
             ev_title.setText(theNote.getTitle());
             isNew = false;
+            ev_desc.addTextChangedListener(textWatcher);
         }
     }
+
     private void showImageToTextDialog() {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -177,15 +253,15 @@ public class EditNote extends AppCompatActivity {
             android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Text", et_image_text_dialog_output.getText().toString());
             clipboard.setPrimaryClip(clip);
             dialog.dismiss();
-            Toast.makeText(this,"Text Copied to clipboard",Toast.LENGTH_SHORT ).show();
+            Toast.makeText(this, "Text Copied to clipboard", Toast.LENGTH_SHORT).show();
         });
 
-        bt_image_image_text_dialog_dismiss.setOnClickListener(view ->{
+        bt_image_image_text_dialog_dismiss.setOnClickListener(view -> {
             dialog.dismiss();
         });
 
         dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT );
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.OcrOutputPopUpDialog;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
@@ -198,50 +274,59 @@ public class EditNote extends AppCompatActivity {
         TextRecognizer textRecognizerDevnagri =
                 TextRecognition.getClient(new DevanagariTextRecognizerOptions.Builder().build());
 
-//        Bitmap bitmap = null;
-//        try {
-//            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        if (bitmap != null) {
         try {
             InputImage inputImage = InputImage.fromFilePath(this, uri);
 
             Task<Text> result = textRecognizer.process(inputImage)
-                    .addOnSuccessListener(new OnSuccessListener<Text>() {
-                        @Override
-                        public void onSuccess(Text text) {
-                            et_image_text_dialog_output.setText(text.getText());
-                            et_image_text_dialog_output.setVisibility(View.VISIBLE);
-                            pb_image_text_dialog_progress.setVisibility(View.GONE);
-                            iv_image_text_dialog_cover.setVisibility(View.GONE);
-                        }
+                    .addOnSuccessListener(text -> {
+                        et_image_text_dialog_output.setText(text.getText());
+                        et_image_text_dialog_output.setVisibility(View.VISIBLE);
+                        pb_image_text_dialog_progress.setVisibility(View.GONE);
+                        iv_image_text_dialog_cover.setVisibility(View.GONE);
                     })
-                    .addOnFailureListener(e -> Log.e("OCR::::::",e.toString() ));
+                    .addOnFailureListener(e -> Log.e("OCR::::::", e.toString()));
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-//        }
     }
 
 
     public void readAloud() {
-        textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status == TextToSpeech.SUCCESS) {
-                    int result = textToSpeech.setLanguage(Locale.ENGLISH);
-                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        Log.e("TTS", "Language Missing");
-                    } else {
-                        textToSpeech.setSpeechRate(1);
-                        textToSpeech.speak(ev_desc.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
-                    }
+        textToSpeech = new TextToSpeech(this, status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                int result = textToSpeech.setLanguage(Locale.ENGLISH);
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    Log.e("TTS", "Language Missing");
+                } else {
+                    textToSpeech.setSpeechRate(1);
+                    textToSpeech.speak(ev_desc.getText().toString(), TextToSpeech.QUEUE_FLUSH, null, TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID);
                 }
+            }
+        });
+        CardView cv_stop = findViewById(R.id.NotesEditor_cv_stop);
+        ImageView iv_stop = findViewById(R.id.NotesEditor_iv_stop);
+        iv_stop.setOnClickListener(view -> {
+            Log.i("textToSpeech.setOnClickListener::::", "Clicked : ");
+            textToSpeech.stop();
+            cv_stop.setVisibility(View.GONE);
+        });
+        textToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+            @Override
+            public void onStart(String s) {
+
+            }
+
+            @Override
+            public void onDone(String s) {
+                Log.i("textToSpeech.onDOne::::", "Finished: " + s);
+                cv_stop.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onError(String s) {
+                Log.i("textToSpeech.onError::::", "Error : " + s);
+
             }
         });
     }
@@ -282,8 +367,30 @@ public class EditNote extends AppCompatActivity {
         takePicture();
     }
 
-    public void copyImageText(View view) {
+    public void listButton(View view) {
 
+    }
 
+    public void boldButton(View view) {
+        int selectionStart = ev_desc.getSelectionStart();
+        int selectionEnd = ev_desc.getSelectionEnd();
+        if (selectionStart != selectionEnd) {
+            Spanned text = (Spanned) ev_desc.getText();
+            Object[] spans = text.getSpans(selectionStart, selectionEnd, Object.class);
+
+            // Apply bold style to the selected text, preserving existing styles
+            SpannableStringBuilder builder = new SpannableStringBuilder(text);
+            builder.setSpan(new StyleSpan(Typeface.BOLD), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            for (Object span : spans) {
+                builder.setSpan(span, text.getSpanStart(span), text.getSpanEnd(span), text.getSpanFlags(span));
+            }
+            // Set the modified text back to the EditText
+            ev_desc.setText(builder);
+
+            // Move the cursor to the end of the selection
+            ev_desc.setSelection(selectionEnd);
+        } else {
+            textBold = !textBold;
+        }
     }
 }

@@ -29,6 +29,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean taskDesc;
     private Observer taskObserver;
     public static ConstraintLayout MAIN_ACTIVITY_LAYOUT = null;
-    public final Task_RecyclerView_Adapter task_adapter = new Task_RecyclerView_Adapter();
+    public Task_RecyclerView_Adapter task_adapter = new Task_RecyclerView_Adapter();
     public final Notes_RecyclerView_Adapter allNotes_adapter = new Notes_RecyclerView_Adapter();
     private Calendar calen;
     private boolean setReminder = false, taskToBottom = false;
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
     };
+    private LiveData<List<Tasks>> getAllTasks;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -175,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.MainMenu_Settings) {
             startActivity(new Intent(this, Preferences_Main.class));
         } else if (item.getItemId() == R.id.MainMenu_futureTasks) {
-            startActivity(new Intent(this, FutureTasks.class));
+            startActivity(new Intent(this, FutureTasksActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
@@ -183,9 +185,27 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        task_adapter = new Task_RecyclerView_Adapter();
         taskToBottom = getPreferences();
+        setTaskAdapter(task_adapter);
 
-//        viewModel.getAllTasks().removeObserver(taskObserver);
+        getAllTasks.removeObserver(taskObserver);
+
+        taskDesc = sharedPreferences.getBoolean(Keys.SHAREDPREF_TASKS_ADD_NEW_BOTTOM, true);
+        taskObserver = o -> {
+            List<Tasks> tasks = (List<Tasks>) o;
+            if (tasks.isEmpty()) {
+                findViewById(R.id.Main_Super_Task_Dialog).setVisibility(View.VISIBLE);
+            } else {
+                findViewById(R.id.Main_Super_Task_Dialog).setVisibility(View.GONE);
+                task_adapter.submitList(tasks);
+            }
+        };
+        getAllTasks=viewModel.getAllTasks(taskDesc);
+        getAllTasks.observe(this, taskObserver);
+        task_RecyclerView.swapAdapter(task_adapter,false);
+
+
         super.onResume();
     }
 
@@ -198,7 +218,6 @@ public class MainActivity extends AppCompatActivity {
         initialize();
         //Log.i("DATE::::::::", String.valueOf(java.util.Calendar.getInstance().getTime()));
 
-        setTaskAdapter();
         setNotesAdapter(notes_all_RecyclerView, allNotes_adapter);
         connectToDB();
 
@@ -259,7 +278,8 @@ public class MainActivity extends AppCompatActivity {
                 task_adapter.submitList(tasks);
             }
         };
-        viewModel.getAllTasks(taskDesc).observe(this, taskObserver);
+        getAllTasks=viewModel.getAllTasks(taskDesc);
+        getAllTasks.observe(this, taskObserver);
 
     }
 
@@ -322,11 +342,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void setTaskAdapter() {
+    private void setTaskAdapter(Task_RecyclerView_Adapter adapter) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         task_RecyclerView.setLayoutManager(layoutManager);
         task_RecyclerView.setItemAnimator(new DefaultItemAnimator());
-        task_RecyclerView.setAdapter(task_adapter);
+        task_RecyclerView.setAdapter(this.task_adapter);
         task_RecyclerView.setOnLongClickListener(view -> false);
     }
 

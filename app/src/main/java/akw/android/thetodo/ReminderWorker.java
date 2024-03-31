@@ -69,7 +69,7 @@ public class ReminderWorker extends Worker{
         Log.i("worker.seNextAlert::::", date.getTime().getTime()+"_"+initialDelay+"_"+Calendar.getInstance().getTimeInMillis());
         OneTimeWorkRequest work = new
                 OneTimeWorkRequest.Builder(ReminderWorker.class)
-                .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+                .setInitialDelay(600000, TimeUnit.MILLISECONDS)
                 .setInputData(getInputData())
                 .build();
         WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork(task.getWorkerID(), ExistingWorkPolicy.KEEP,work);
