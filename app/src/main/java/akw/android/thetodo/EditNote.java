@@ -16,14 +16,17 @@ import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.text.Editable;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,16 +67,74 @@ public class EditNote extends AppCompatActivity {
     final int IMAGE_TO_TEXT_INTENT = 52, CAMERA_INTENT = 51, IMAGE_EDITOR_INTENT = 50;
     private TheViewModel viewModel;
     private EditText ev_title, ev_desc;
-    private int n_id, g_id;
+    private int n_id, g_id, alignment = 0;
     private Notes theNote;
-    private boolean isNew = true, textBold = false, textItalic = false, textUnderline = false, textStrike = false;
+    private boolean isNew = true, textBold = false, textItalic = false, textUnderline = false, textStrike = false, listing = false;
     private Bitmap bmpImg;
     private ImageView iv_image, iv_image_text_dialog_cover;
     private Toolbar toolbar;
     private TextToSpeech textToSpeech;
     private EditText et_image_text_dialog_output;
     private ProgressBar pb_image_text_dialog_progress;
-    TextWatcher textWatcher;
+    SpannableStringBuilder previousStyledText;
+    TextWatcher textWatcher = new TextWatcher() {
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            String text = s.toString();
+            SpannableStringBuilder spannable = new SpannableStringBuilder(text);
+            int cursorPosition = ev_desc.getSelectionEnd();
+
+            updatePrevStyles(previousStyledText, spannable);
+
+// Apply new styling to the typed text
+            if (textBold) {
+                spannable.setSpan(new StyleSpan(Typeface.BOLD),
+                        Math.max(0, cursorPosition - 1), cursorPosition,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            if (textItalic) {
+                spannable.setSpan(new StyleSpan(Typeface.ITALIC),
+                        Math.max(0, cursorPosition - 1), cursorPosition,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            if (textStrike) {
+                spannable.setSpan(new StrikethroughSpan(),
+                        Math.max(0, cursorPosition - 1), cursorPosition,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            if (textUnderline) {
+                spannable.setSpan(new UnderlineSpan(),
+                        Math.max(0, cursorPosition - 1), cursorPosition,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
+// Update the EditText with the styled text
+            ev_desc.removeTextChangedListener(this);
+            ev_desc.setText(spannable);
+
+// Set the cursor position
+            if (cursorPosition >= 0 && cursorPosition <= spannable.length()) {
+                ev_desc.setSelection(cursorPosition);
+            } else {
+                // If the previous cursor position is out of bounds, move it to the end
+                ev_desc.setSelection(spannable.length());
+            }
+            ev_desc.addTextChangedListener(this);
+
+// Store the styled text for future reference
+            previousStyledText = spannable;
+
+        }
+    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -107,6 +168,12 @@ public class EditNote extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        save();
+        super.onBackPressed();
+    }
 
     @Override
     public void finish() {
@@ -148,78 +215,10 @@ public class EditNote extends AppCompatActivity {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         viewModel = ViewModelProviders.of(this).get(TheViewModel.class);
 
         ev_title = findViewById(R.id.NotesEditor_EditTextView_Title);
         ev_desc = findViewById(R.id.NotesEditor_EditTextView_all);
-//        iv_image = findViewById(R.id.NotesEditor_ImageView_image);
-
-        textWatcher = new TextWatcher() {
-            SpannableStringBuilder previousStyledText;
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String text = s.toString();
-                SpannableStringBuilder spannable = new SpannableStringBuilder(text);
-                int cursorPosition = ev_desc.getSelectionEnd();
-
-                if (textBold || textItalic || textStrike || textUnderline) {
-                    if (textBold) {
-                        spannable.setSpan(new StyleSpan(Typeface.BOLD),
-                                cursorPosition - 1,
-                                cursorPosition,
-                                0);
-                    }
-                    if (textItalic) {
-                        spannable.setSpan(new StyleSpan(Typeface.ITALIC),
-                                cursorPosition - 1,
-                                cursorPosition,
-                                0);
-                    }
-                    if (textStrike) {
-                        spannable.setSpan(new StrikethroughSpan(),
-                                cursorPosition - 1,
-                                cursorPosition,
-                                0);
-                    }
-                    if (textUnderline) {
-                        spannable.setSpan(new StyleSpan(Typeface.BOLD),
-                                cursorPosition - 1,
-                                cursorPosition,
-                                0);
-                    }
-
-
-                    if (previousStyledText != null) {
-                        for (Object span : previousStyledText.getSpans(0, previousStyledText.length(), Object.class)) {
-                            spannable.setSpan(span, previousStyledText.getSpanStart(span), previousStyledText.getSpanEnd(span), previousStyledText.getSpanFlags(span));
-                        }
-                    }
-
-                    ev_desc.removeTextChangedListener(this);
-                    ev_desc.setText(spannable);
-                    if (cursorPosition >= 0 && cursorPosition <= s.length()) {
-                        ev_desc.setSelection(cursorPosition);
-                    } else {
-                        // If the previous cursor position is out of bounds, move it to the end
-                        ev_desc.setSelection(spannable.length());
-                    }
-                    ev_desc.addTextChangedListener(this);
-                    previousStyledText = spannable;
-
-                }
-            }
-
-        };
 
         Intent extras = getIntent();
         if (extras.getBooleanExtra("isNew", true)) {
@@ -227,10 +226,35 @@ public class EditNote extends AppCompatActivity {
         } else {
             n_id = extras.getIntExtra("note_id", 0);
             theNote = viewModel.getNote(n_id);
-            ev_desc.setText(theNote.getBody());
+            Spanned spanned= Html.fromHtml(theNote.getBody());
+            previousStyledText= SpannableStringBuilder.valueOf(spanned);
+            updatePrevStyles(previousStyledText,SpannableStringBuilder.valueOf(spanned));
+            ev_desc.setText(spanned);
             ev_title.setText(theNote.getTitle());
             isNew = false;
-            ev_desc.addTextChangedListener(textWatcher);
+        }
+        ev_desc.addTextChangedListener(textWatcher);
+        ev_desc.setOnKeyListener((v, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                // Check if the list boolean is true
+                if (listing) {
+                    // Add a new line with a bullet point
+                    int pos = ev_desc.getSelectionEnd();
+                    ev_desc.getText().insert(pos, "\n\u2022 ");
+                    ev_desc.setSelection(pos + 3);
+                    return true; // Consume the key event
+                }
+            }
+            return false; // Let the system handle the key event
+        });
+    }
+
+    private void updatePrevStyles(SpannableStringBuilder previousStyledText, Spannable spannable) {
+        if (previousStyledText != null) {
+            Object[] spans = previousStyledText.getSpans(0, previousStyledText.length(), Object.class);
+            for (Object span : spans) {
+                spannable.setSpan(span, previousStyledText.getSpanStart(span), previousStyledText.getSpanEnd(span), previousStyledText.getSpanFlags(span));
+            }
         }
     }
 
@@ -291,7 +315,6 @@ public class EditNote extends AppCompatActivity {
         }
     }
 
-
     public void readAloud() {
         textToSpeech = new TextToSpeech(this, status -> {
             if (status == TextToSpeech.SUCCESS) {
@@ -333,14 +356,16 @@ public class EditNote extends AppCompatActivity {
 
     public void save() {
         String title = ev_title.getText().toString().trim();
-        String desc = ev_desc.getText().toString().trim();
+        Spannable spannable = ev_desc.getText();
+        updatePrevStyles(previousStyledText, spannable);
+        String desc = Html.toHtml(spannable);
         if (isNew) {
             Notes note = new Notes(title.trim(), desc);
             note.setG_id(g_id);
             viewModel.insert(note);
             isNew = false;
         } else {
-            if (!title.equals(theNote.getTitle()) || !desc.equals(theNote.getBody())) {
+            if (!previousStyledText.equals(spannable) || !title.equals(theNote.getTitle()) || !desc.equals(theNote.getBody())) {
                 theNote.setTitle(title);
                 theNote.setBody(desc);
                 Date getDate = java.util.Calendar.getInstance().getTime();
@@ -363,15 +388,43 @@ public class EditNote extends AppCompatActivity {
         }
     }
 
-    public void pic(View view) {
-        takePicture();
-    }
 
-    public void listButton(View view) {
-
-    }
+//    public void listButton(View view) {
+//        ImageView iv_ = findViewById(R.id.NotesEditor_iv_list);
+//        CardView cv_ = findViewById(R.id.NotesEditor_cv_list);
+//        int pos = ev_desc.getSelectionEnd()-1;
+//        if (listing) {
+//            String s = ev_desc.getText().toString();
+//            Editable es = ev_desc.getEditableText();
+//            if (s.charAt(pos - 1) == '\u2022' && s.charAt(pos) == ' ') {
+//                es.delete(pos - 1, pos);
+//                ev_desc.setText(es);
+//                ev_desc.setSelection(pos - 2);
+//            } else if (s.charAt(pos) == '\u2022') {
+//                es.delete(pos - 1, pos);
+//                ev_desc.setText(es);
+//                ev_desc.setSelection(pos);
+//            }
+//
+//            cv_.setCardBackgroundColor(Color.TRANSPARENT);
+//            iv_.setImageResource(R.drawable.ic_round_view_list_24_black);
+//        } else {
+//            if (ev_desc.getText().charAt(pos) == '\n') {
+//                ev_desc.getText().insert(pos, "\u2022 ");
+//                ev_desc.setSelection(pos + 2);
+//            } else {
+//                ev_desc.getText().insert(pos + 1, "\n\u2022 ");
+//                ev_desc.setSelection(pos + 4);
+//            }
+//            cv_.setCardBackgroundColor(Color.WHITE);
+//            iv_.setImageResource(R.drawable.ic_round_view_list_24_white);
+//        }
+//        listing = !listing;
+//    }
 
     public void boldButton(View view) {
+        ImageView iv_bold = findViewById(R.id.NotesEditor_iv_bold);
+        CardView cv_bold = findViewById(R.id.NotesEditor_cv_bold);
         int selectionStart = ev_desc.getSelectionStart();
         int selectionEnd = ev_desc.getSelectionEnd();
         if (selectionStart != selectionEnd) {
@@ -390,7 +443,125 @@ public class EditNote extends AppCompatActivity {
             // Move the cursor to the end of the selection
             ev_desc.setSelection(selectionEnd);
         } else {
+            if (textBold) {
+                cv_bold.setCardBackgroundColor(Color.TRANSPARENT);
+                iv_bold.setImageResource(R.drawable.ic_baseline_format_bold_24_white);
+            } else {
+                cv_bold.setCardBackgroundColor(Color.WHITE);
+                iv_bold.setImageResource(R.drawable.ic_baseline_format_bold_24_black);
+            }
             textBold = !textBold;
         }
+    }
+
+    public void italicButton(View view) {
+        ImageView iv_ = findViewById(R.id.NotesEditor_iv_italic);
+        CardView cv_ = findViewById(R.id.NotesEditor_cv_italic);
+        int selectionStart = ev_desc.getSelectionStart();
+        int selectionEnd = ev_desc.getSelectionEnd();
+        if (selectionStart != selectionEnd) {
+            Spanned text = (Spanned) ev_desc.getText();
+            Object[] spans = text.getSpans(selectionStart, selectionEnd, Object.class);
+
+            // Apply bold style to the selected text, preserving existing styles
+            SpannableStringBuilder builder = new SpannableStringBuilder(text);
+            builder.setSpan(new StyleSpan(Typeface.BOLD), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            for (Object span : spans) {
+                builder.setSpan(span, text.getSpanStart(span), text.getSpanEnd(span), text.getSpanFlags(span));
+            }
+            // Set the modified text back to the EditText
+            ev_desc.setText(builder);
+
+            // Move the cursor to the end of the selection
+            ev_desc.setSelection(selectionEnd);
+        } else {
+            if (textItalic) {
+                cv_.setCardBackgroundColor(Color.TRANSPARENT);
+                iv_.setImageResource(R.drawable.ic_round_format_italic_24_white);
+            } else {
+                cv_.setCardBackgroundColor(Color.WHITE);
+                iv_.setImageResource(R.drawable.ic_round_format_italic_24_black);
+            }
+            textItalic = !textItalic;
+
+        }
+    }
+
+    public void strikeButton(View view) {
+        ImageView iv_bold = findViewById(R.id.NotesEditor_iv_strike);
+        CardView cv_bold = findViewById(R.id.NotesEditor_cv_strike);
+        int selectionStart = ev_desc.getSelectionStart();
+        int selectionEnd = ev_desc.getSelectionEnd();
+        if (selectionStart != selectionEnd) {
+            Spanned text = (Spanned) ev_desc.getText();
+            Object[] spans = text.getSpans(selectionStart, selectionEnd, Object.class);
+
+            // Apply bold style to the selected text, preserving existing styles
+            SpannableStringBuilder builder = new SpannableStringBuilder(text);
+            builder.setSpan(new StyleSpan(Typeface.BOLD), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            for (Object span : spans) {
+                builder.setSpan(span, text.getSpanStart(span), text.getSpanEnd(span), text.getSpanFlags(span));
+            }
+            // Set the modified text back to the EditText
+            ev_desc.setText(builder);
+
+            // Move the cursor to the end of the selection
+            ev_desc.setSelection(selectionEnd);
+        } else {
+            if (textStrike) {
+                cv_bold.setCardBackgroundColor(Color.TRANSPARENT);
+                iv_bold.setImageResource(R.drawable.ic_baseline_format_strikethrough_24_white);
+            } else {
+                cv_bold.setCardBackgroundColor(Color.WHITE);
+                iv_bold.setImageResource(R.drawable.ic_baseline_format_strikethrough_24_black);
+            }
+            textStrike = !textStrike;
+
+        }
+    }
+
+    public void underlineButton(View view) {
+        ImageView iv_bold = findViewById(R.id.NotesEditor_iv_underLine);
+        CardView cv_bold = findViewById(R.id.NotesEditor_cv_underLine);
+        int selectionStart = ev_desc.getSelectionStart();
+        int selectionEnd = ev_desc.getSelectionEnd();
+        if (selectionStart != selectionEnd) {
+            Spanned text = (Spanned) ev_desc.getText();
+            Object[] spans = text.getSpans(selectionStart, selectionEnd, Object.class);
+
+            // Apply bold style to the selected text, preserving existing styles
+            SpannableStringBuilder builder = new SpannableStringBuilder(text);
+            builder.setSpan(new StyleSpan(Typeface.BOLD), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            for (Object span : spans) {
+                builder.setSpan(span, text.getSpanStart(span), text.getSpanEnd(span), text.getSpanFlags(span));
+            }
+            // Set the modified text back to the EditText
+            ev_desc.setText(builder);
+
+            // Move the cursor to the end of the selection
+            ev_desc.setSelection(selectionEnd);
+        } else {
+            if (textUnderline) {
+//                cv_bold.setCardBackgroundColor(Color.TRANSPARENT);
+                iv_bold.setImageResource(R.drawable.ic_baseline_format_underlined_24_white);
+            } else {
+//                cv_bold.setBackgroundColor(Color.WHITE);
+                iv_bold.setImageResource(R.drawable.ic_baseline_format_underlined_24_black);
+            }
+            textUnderline = !textUnderline;
+
+        }
+    }
+
+    public void alignmentButton(View view) {
+        alignment = alignment == 2 ? 0 : alignment + 1;
+        int[] arrDraw = new int[]{R.drawable.ic_round_format_align_left_24, R.drawable.ic_baseline_format_align_center_24, R.drawable.ic_baseline_format_align_right_24};
+        int[] arr = new int[]{View.TEXT_ALIGNMENT_TEXT_START, View.TEXT_ALIGNMENT_CENTER, View.TEXT_ALIGNMENT_TEXT_END};
+        ev_desc.setTextAlignment(arr[alignment]);
+        Spannable spannable = ev_desc.getText();
+        updatePrevStyles(previousStyledText,spannable);
+        ev_desc.setText(spannable);
+        ImageView iv = findViewById(R.id.NotesEditor_iv_alignment);
+        iv.setImageResource(arrDraw[alignment]);
     }
 }

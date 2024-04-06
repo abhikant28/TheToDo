@@ -56,27 +56,7 @@
             android:gravity="center_horizontal"
             android:visibility="visible">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/NotesEditor_cv_list"
-                android:layout_width="45sp"
-                android:layout_height="45sp"
-                app:cardCornerRadius="200sp"
-                android:layout_margin="5sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/NotesEditor_iv_list"
-                    android:layout_width="35sp"
-                    android:layout_height="35sp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_round_view_list_24"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:onClick="listButton"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.cardview.widget.CardView>
 
 
             <androidx.cardview.widget.CardView
@@ -84,6 +64,8 @@
                 android:layout_width="45sp"
                 android:layout_height="45sp"
                 app:cardCornerRadius="200sp"
+                android:backgroundTint="#00000000"
+                android:onClick="boldButton"
                 android:layout_margin="5sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -94,7 +76,8 @@
                     android:layout_width="35sp"
                     android:layout_height="35sp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_baseline_format_bold_24_black"
+                    android:src="@drawable/ic_baseline_format_bold_24_white"
+                    android:backgroundTint="#00000000"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -105,7 +88,8 @@
                 android:layout_height="45sp"
                 app:cardCornerRadius="200sp"
                 android:layout_margin="5sp"
-                android:backgroundTint="@color/black"
+                android:backgroundTint="#00000000"
+                android:onClick="italicButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -116,8 +100,7 @@
                     android:layout_height="35sp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_round_format_italic_24_white"
-                    android:onClick="boldButton"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="#00000000"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -129,6 +112,8 @@
                 app:cardCornerRadius="200sp"
                 android:layout_margin="5sp"
                 android:outlineAmbientShadowColor="@color/black"
+                android:backgroundTint="#00000000"
+                android:onClick="underlineButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -138,7 +123,8 @@
                     android:layout_width="35sp"
                     android:layout_height="35sp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_baseline_format_underlined_24_black"
+                    android:src="@drawable/ic_baseline_format_underlined_24_white"
+                    android:backgroundTint="#00000000"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -148,7 +134,9 @@
                 android:layout_width="45sp"
                 android:layout_height="45sp"
                 app:cardCornerRadius="200sp"
+                android:onClick="strikeButton"
                 android:layout_margin="5sp"
+                android:backgroundTint="#00000000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -158,6 +146,7 @@
                     android:layout_width="35sp"
                     android:layout_height="35sp"
                     android:layout_gravity="center"
+                    android:backgroundTint="#00000000"
                     android:src="@drawable/ic_baseline_format_strikethrough_24_white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -169,7 +158,9 @@
                 android:layout_height="45sp"
                 app:cardCornerRadius="200sp"
                 android:layout_margin="5sp"
+                android:onClick="alignmentButton"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:backgroundTint="#00000000"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -179,13 +170,11 @@
                     android:layout_height="35sp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_round_format_align_left_24"
+                    android:backgroundTint="#00000000"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.cardview.widget.CardView>
-
-
-
 
         </LinearLayout>
 

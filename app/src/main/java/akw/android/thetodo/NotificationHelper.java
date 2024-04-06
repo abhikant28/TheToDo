@@ -72,7 +72,7 @@ public class NotificationHelper extends ContextWrapper {
         Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_1_ID)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setSmallIcon(R.drawable.ic_baseline_playlist_add_check_24)
+                .setSmallIcon(R.drawable.ic_baseline_playlist_add_check_24_white)
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .build();

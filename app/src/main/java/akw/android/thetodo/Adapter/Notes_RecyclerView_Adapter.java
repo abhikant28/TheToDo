@@ -5,6 +5,8 @@ import static akw.android.thetodo.MainActivity.viewModel;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,7 +64,8 @@ public class Notes_RecyclerView_Adapter extends ListAdapter<Notes, Notes_Recycle
         String date = getItem(position).getDate();
 
         if (title.length() == 0) {
-            holder.tv_title.setText(about);
+            Spanned spanned= Html.fromHtml(about);
+            holder.tv_title.setText(spanned);
             holder.tv_full.setText("");
         } else {
             holder.tv_title.setText(title);

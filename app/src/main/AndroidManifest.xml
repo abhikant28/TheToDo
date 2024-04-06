@@ -58,7 +58,8 @@
         <activity
             android:name=".EditNote"
             android:exported="true"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".SplashScreen"
             android:exported="true"
@@ -71,15 +72,15 @@
             </intent-filter>
         </activity>
 
-<!--        <receiver android:name=".AlertReceiver" />-->
-<!--        <receiver-->
-<!--            android:name=".BootBroadcastReceiver"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.BOOT_COMPLETED" />-->
-<!--            </intent-filter>-->
-<!--        </receiver> &lt;!&ndash; Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 &ndash;&gt;-->
+        <!--        <receiver android:name=".AlertReceiver" />-->
+        <!--        <receiver-->
+        <!--            android:name=".BootBroadcastReceiver"-->
+        <!--            android:enabled="true"-->
+        <!--            android:exported="true">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.BOOT_COMPLETED" />-->
+        <!--            </intent-filter>-->
+        <!--        </receiver> &lt;!&ndash; Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 &ndash;&gt;-->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
